@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobility Intelligence — Fortnightly Update</title>
+<style>
+:root {
+  --ds-space-01: 2px; --ds-space-02: 4px; --ds-space-03: 8px; --ds-space-04: 16px;
+  --ds-space-05: 24px; --ds-space-06: 32px; --ds-space-07: 40px; --ds-space-08: 48px;
+  --ds-space-09: 64px; --ds-space-10: 80px; --ds-space-11: 96px; --ds-space-12: 160px;
+
+  --ds-font-sans: Arial, Helvetica, sans-serif;
+
+  --ds-color-company-red:       #CC0000;
+  --ds-color-company-red-hover: #9D1B22;
+  --ds-color-black:             #121212;
+  --ds-color-white:             #FFFFFF;
+
+  --ds-text-black:    #000000;
+  --ds-text-dark:     #333333;
+  --ds-text-regular:  #717171;
+  --ds-text-body:     #616568;
+  --ds-text-helper:   #767676;
+  --ds-text-on-color: #FFFFFF;
+
+  --ds-gray-x-light:  #F9F9F9;
+  --ds-gray-light:    #ECECEC;
+  --ds-gray-medium:   #CCCCCC;
+  --ds-gray-dark:     #A3A3A3;
+  --ds-stroke:        #D8D8D8;
+
+  --ds-success:       #07C29F;
+  --ds-success-light: #DAF2ED;
+  --ds-warning:       #F1C21B;
+  --ds-warning-light: #FEF7E8;
+  --ds-error:         #CC0000;
+  --ds-error-light:   #F2DFD8;
+
+  --ds-background:        var(--ds-color-white);
+  --ds-background-hover:  rgba(0, 0, 0, 0.04);
+  --ds-layer-tinted:      var(--ds-gray-x-light);
+
+  --ds-shadow-card: 0 14px 42px 0 rgba(8, 15, 52, 0.06);
+  --ds-nav-height: 64px;
+
+  --ds-red-100: #FF6666; --ds-red-200: #CC0000; --ds-red-300: #990000; --ds-red-400: #660000;
+  --ds-violet-100: #D5D6FF; --ds-violet-200: #988FEC; --ds-violet-300: #5E4ADC;
+  --ds-purple-100: #B4A2CB; --ds-purple-200: #926F98; --ds-purple-300: #4F0731;
+  --ds-chart-gray-100: #D2D2D1; --ds-chart-gray-200: #A5A5A4; --ds-chart-gray-300: #777776;
+  --ds-chart-gray-400: #343432; --ds-chart-gray-500: #000000;
+  --ds-other-100: #F2EEE9; --ds-other-200: #DCD1C9; --ds-other-300: #C6B3A8;
+  --ds-diverging-1: #4F0731; --ds-diverging-2: #7C4C76; --ds-diverging-3: #A891BA;
+  --ds-diverging-4: #D5D6FF; --ds-diverging-5: #DDABD3; --ds-diverging-6: #DD476D; --ds-diverging-7: #FF0024;
+  --ds-nps-red: #CC0000; --ds-nps-gray: #979797; --ds-nps-yellow: #FFCC00;
+
+  --ds-surface: var(--ds-color-white);
+  --ds-surface-text: var(--ds-text-dark);
+  --ds-surface-heading: var(--ds-text-black);
+  --ds-surface-divider: var(--ds-stroke);
+  --ds-surface-eyebrow: var(--ds-color-company-red);
+}
+
+html, body { font-family: var(--ds-font-sans); color: var(--ds-surface-text); background: var(--ds-surface); margin: 0; font-size: 18px; line-height: 28px; }
+* { box-sizing: border-box; }
+
+/* ===== Level 1: primary nav ===== */
+.nav {
+  position: sticky; top: 0; height: var(--ds-nav-height); z-index: 100;
+  background: var(--ds-color-white); border-bottom: 2px solid var(--ds-color-black);
+  display: flex; align-items: center; padding: 0 var(--ds-space-06); gap: var(--ds-space-05);
+}
+.nav__brand { display: flex; align-items: center; gap: var(--ds-space-03); font-weight: 700; font-size: 18px; color: var(--ds-text-black); white-space: nowrap; }
+.nav__mark { width: 10px; height: 26px; background: var(--ds-color-company-red); flex-shrink: 0; }
+.nav__brand span.sub { font-weight: 400; color: var(--ds-text-regular); font-size: 13px; }
+.nav__links { display: flex; gap: var(--ds-space-02); margin-left: var(--ds-space-05); }
+.nav__link {
+  background: none; border: none; border-bottom: 3px solid transparent;
+  font-family: var(--ds-font-sans); font-size: 15px; font-weight: 700; color: var(--ds-text-regular);
+  padding: var(--ds-space-05) var(--ds-space-03) calc(var(--ds-space-05) - 3px); cursor: pointer; height: var(--ds-nav-height);
+  white-space: nowrap;
+}
+.nav__link:hover { color: var(--ds-text-black); }
+.nav__link[aria-current="true"] { color: var(--ds-color-company-red); border-bottom-color: var(--ds-color-company-red); }
+.nav__link:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: -2px; }
+.nav__count { font-size: 12px; background: var(--ds-color-company-red); color: var(--ds-text-on-color); border-radius: 45px; padding: 1px 7px; margin-left: var(--ds-space-02); vertical-align: middle; }
+.nav__spacer { flex: 1; }
+.nav__edition { font-size: 13px; font-weight: 700; color: var(--ds-text-regular); white-space: nowrap; }
+
+/* ===== Level 2: value-chain sub nav ===== */
+.subnav {
+  position: sticky; top: var(--ds-nav-height); z-index: 90;
+  background: var(--ds-gray-x-light); border-bottom: 1px solid var(--ds-stroke);
+  padding: 0 var(--ds-space-06);
+  display: flex; align-items: center; gap: var(--ds-space-02); flex-wrap: wrap;
+}
+.subnav__link {
+  background: none; border: none; font-family: var(--ds-font-sans); font-size: 14px; font-weight: 700;
+  color: var(--ds-text-regular); padding: var(--ds-space-04) var(--ds-space-04); cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.subnav__link:hover { color: var(--ds-text-black); }
+.subnav__link[aria-current="true"] { color: var(--ds-text-black); border-bottom-color: var(--ds-color-company-red); }
+.subnav__link:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: -2px; }
+
+/* ===== Layout ===== */
+.page { max-width: 1080px; margin: 0 auto; padding: var(--ds-space-07) var(--ds-space-06) var(--ds-space-10); }
+.pagehead { border-bottom: 1px solid var(--ds-stroke); padding-bottom: var(--ds-space-04); margin-bottom: var(--ds-space-06); }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ds-color-company-red); margin: 0 0 var(--ds-space-03); }
+h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-black); margin: 0 0 var(--ds-space-03); letter-spacing: -0.01em; }
+.pagehead p { font-size: 18px; line-height: 26px; color: var(--ds-text-regular); margin: 0; max-width: 720px; }
+.section-hidden { display: none; }
+
+/* ===== Level 3: filters ===== */
+.filterbar { display: flex; flex-direction: column; gap: var(--ds-space-03); margin-bottom: var(--ds-space-06); }
+.geobar { display: flex; align-items: center; gap: var(--ds-space-03); flex-wrap: wrap; }
+.geobar__label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ds-text-regular); margin-right: var(--ds-space-02); }
+.geo-pill {
+  font-family: var(--ds-font-sans); font-size: 14px; font-weight: 700; line-height: 20px;
+  padding: var(--ds-space-02) var(--ds-space-04); border-radius: 45px;
+  border: 2px solid var(--ds-gray-light); background: var(--ds-color-white);
+  color: var(--ds-text-dark); cursor: pointer; min-height: 40px;
+}
+.geo-pill:hover { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
+.geo-pill[aria-pressed="true"] { background: var(--ds-color-company-red); border-color: var(--ds-color-company-red); color: var(--ds-text-on-color); }
+.geo-pill:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
+
+/* Strong-implication pill carries a small marker so meaning isn't colour-only */
+.geo-pill--strong { display: inline-flex; align-items: center; gap: var(--ds-space-02); }
+.geo-pill--strong::before { content: ""; width: 8px; height: 8px; background: var(--ds-color-company-red); border-radius: 50%; flex-shrink: 0; }
+.geo-pill--strong[aria-pressed="true"]::before { background: var(--ds-color-white); }
+
+/* Implication badge on cards */
+.tag--imp-strong { border-color: var(--ds-color-company-red); background: var(--ds-color-company-red); color: var(--ds-text-on-color); }
+.tag--imp-strong .dot { width: 7px; height: 7px; background: var(--ds-color-white); border-radius: 50%; display: inline-block; }
+.tag--imp-less { border-color: var(--ds-stroke); background: var(--ds-gray-x-light); color: var(--ds-text-regular); }
+
+.results-count { font-size: 14px; color: var(--ds-text-regular); margin-bottom: var(--ds-space-05); }
+.results-count strong { color: var(--ds-text-black); }
+
+/* ===== Article rows (editorial) ===== */
+.article-list { display: flex; flex-direction: column; }
+.article {
+  display: grid; grid-template-columns: 240px 1fr; gap: var(--ds-space-06);
+  padding: var(--ds-space-06) 0; border-top: 1px solid var(--ds-stroke); align-items: start;
+}
+.article:first-child { border-top: none; }
+.article__thumb {
+  width: 240px; height: 150px; background: var(--ds-gray-light); position: relative; overflow: hidden;
+  border: 1px solid var(--ds-stroke);
+}
+.article__thumb svg { width: 100%; height: 100%; display: block; }
+.article__body { min-width: 0; }
+.article__meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-03); align-items: center; margin-bottom: var(--ds-space-03); }
+.tag { display: inline-flex; align-items: center; gap: var(--ds-space-02); font-size: 12px; font-weight: 700; line-height: 16px; padding: 3px var(--ds-space-03); border: 1px solid var(--ds-stroke); background: var(--ds-gray-x-light); color: var(--ds-text-dark); text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+.tag--chain { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); background: var(--ds-color-white); }
+.tag--flag { padding-left: var(--ds-space-02); text-transform: none; letter-spacing: 0; }
+.tag__flag { width: 18px; height: 12px; flex-shrink: 0; display: inline-block; vertical-align: middle; border: 1px solid var(--ds-gray-light); }
+.article__title { font-size: 24px; line-height: 30px; font-weight: 700; color: var(--ds-text-black); margin: 0 0 var(--ds-space-03); letter-spacing: -0.01em; }
+.article__summary { font-size: 16px; line-height: 25px; color: var(--ds-text-dark); margin: 0 0 var(--ds-space-04); }
+.article__implication { font-size: 14px; line-height: 22px; color: var(--ds-text-body); border-left: 3px solid var(--ds-gray-dark); padding-left: var(--ds-space-04); margin: 0 0 var(--ds-space-04); }
+.article__implication strong { color: var(--ds-text-black); }
+.article__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-04); flex-wrap: wrap; }
+.article__byline { font-size: 13px; color: var(--ds-text-regular); }
+.article__byline .src { font-weight: 700; color: var(--ds-text-dark); }
+
+/* Save button */
+.save-btn {
+  display: inline-flex; align-items: center; gap: var(--ds-space-02);
+  font-family: var(--ds-font-sans); font-size: 13px; font-weight: 700;
+  background: var(--ds-color-white); border: 1px solid var(--ds-stroke); color: var(--ds-text-dark);
+  padding: var(--ds-space-02) var(--ds-space-04); cursor: pointer; min-height: 40px; border-radius: 45px;
+}
+.save-btn svg { width: 16px; height: 16px; fill: none; stroke: var(--ds-text-regular); stroke-width: 1.6; }
+.save-btn:hover { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
+.save-btn:hover svg { stroke: var(--ds-color-company-red); }
+.save-btn[aria-pressed="true"] { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
+.save-btn[aria-pressed="true"] svg { fill: var(--ds-color-company-red); stroke: var(--ds-color-company-red); }
+.save-btn:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
+
+.empty { padding: var(--ds-space-09); text-align: center; color: var(--ds-text-regular); border: 1px dashed var(--ds-stroke); background: var(--ds-gray-x-light); }
+.ds-btn { font-family: var(--ds-font-sans); font-size: 14px; font-weight: 700; line-height: 16px; text-transform: uppercase; padding: var(--ds-space-04) var(--ds-space-05); border: 1px solid transparent; border-radius: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; min-height: 52px; }
+.ds-btn--white { background: var(--ds-color-white); color: var(--ds-color-company-red); border-color: var(--ds-stroke); }
+.ds-btn--white:hover { background: var(--ds-color-company-red-hover); color: var(--ds-text-on-color); border-color: var(--ds-color-company-red-hover); }
+.ds-btn:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
+
+/* Opinions get a subtle distinction: author-forward */
+.article--opinion .tag--chain { border-color: var(--ds-purple-300); color: var(--ds-purple-300); }
+
+@media (max-width: 760px) {
+  .nav { padding: 0 var(--ds-space-04); gap: var(--ds-space-03); overflow-x: auto; }
+  .nav__edition, .nav__brand span.sub { display: none; }
+  .subnav { padding: 0 var(--ds-space-04); overflow-x: auto; flex-wrap: nowrap; }
+  .page { padding: var(--ds-space-05) var(--ds-space-04) var(--ds-space-09); }
+  h1 { font-size: 30px; line-height: 36px; }
+  .article { grid-template-columns: 1fr; gap: var(--ds-space-04); }
+  .article__thumb { width: 100%; height: 180px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LEVEL 1 -->
+<nav class="nav">
+  <div class="nav__brand"><span class="nav__mark" aria-hidden="true"></span> Mobility Intelligence <span class="sub">ME &amp; Europe</span></div>
+  <div class="nav__links" role="tablist">
+    <button class="nav__link" role="tab" aria-current="true" data-view="latest">Latest News</button>
+    <button class="nav__link" role="tab" aria-current="false" data-view="older">Older News</button>
+    <button class="nav__link" role="tab" aria-current="false" data-view="opinions">Opinions</button>
+    <button class="nav__link" role="tab" aria-current="false" data-view="saved">Saved Articles <span class="nav__count" id="savedCount" style="display:none">0</span></button>
+  </div>
+  <div class="nav__spacer"></div>
+  <div class="nav__edition" id="navEdition">Snapshot: 23 Jul 2026 · live sources</div>
+</nav>
+
+<!-- LEVEL 2 (only for latest / older) -->
+<div class="subnav" id="subnav" role="tablist" aria-label="Automotive value chain">
+  <button class="subnav__link" role="tab" aria-current="true" data-chain="market">Market</button>
+  <button class="subnav__link" role="tab" aria-current="false" data-chain="automakers">Automakers</button>
+  <button class="subnav__link" role="tab" aria-current="false" data-chain="distribution">Distribution</button>
+  <button class="subnav__link" role="tab" aria-current="false" data-chain="aftermarket">Aftermarket</button>
+  <button class="subnav__link" role="tab" aria-current="false" data-chain="regulation">Regulation</button>
+</div>
+
+<main class="page">
+  <div class="pagehead">
+    <p class="eyebrow" id="ph-eyebrow">Latest News · Market</p>
+    <h1 id="ph-title">Market</h1>
+    <p id="ph-desc">Market and macroeconomic developments relevant to automotive distributors — sales volumes, demand shifts, logistics costs and macro shocks.</p>
+  </div>
+
+  <!-- LEVEL 3 -->
+  <div class="filterbar" id="filterbar">
+    <div class="geobar" id="geobar" role="group" aria-label="Region filter">
+      <span class="geobar__label">Region</span>
+      <button class="geo-pill" data-geo="" aria-pressed="true">All</button>
+      <button class="geo-pill" data-geo="Middle East" aria-pressed="false">Middle East</button>
+      <button class="geo-pill" data-geo="Europe" aria-pressed="false">Europe</button>
+      <button class="geo-pill" data-geo="Rest of World" aria-pressed="false">Rest of World</button>
+    </div>
+    <div class="geobar" id="impbar" role="group" aria-label="Implication filter">
+      <span class="geobar__label">Implication</span>
+      <button class="geo-pill" data-imp="" aria-pressed="true">All</button>
+      <button class="geo-pill geo-pill--strong" data-imp="strong" aria-pressed="false">Strong implication</button>
+      <button class="geo-pill" data-imp="less" aria-pressed="false">Less implication</button>
+    </div>
+  </div>
+
+  <p class="results-count" id="resultsCount"></p>
+  <div class="article-list" id="articleList"></div>
+</main>
+
+<script>
+/* ============================================================
+   TAXONOMY
+   ============================================================ */
+const CHAINS = {
+  market:        { title:"Market",        desc:"Market, macroeconomic and consumer-trend developments relevant to distributors — sales volumes, demand shifts, buyer preferences and behaviour, logistics costs and macro shocks." },
+  automakers:    { title:"Automakers",    desc:"News on vehicle and parts manufacturers — new products, powertrains, financial performance and strategy." },
+  distribution:  { title:"Distribution",  desc:"News on distribution players across markets — retail innovation, agency models, products, network and financial performance." },
+  aftermarket:   { title:"Aftermarket",   desc:"News on used cars, hire and rental, and maintenance and repair — including service players expanding, serving or partnering with distributors, and used-car, hire or rental firms partnering with distributors." },
+  regulation:    { title:"Regulation",    desc:"Regulations relevant to automotive — tariffs, emissions standards, EV mandates, import rules and homologation." }
+};
+const REGIONS = ["Middle East","Europe","Rest of World"];
+
+const FLAGS = {
+  "UAE":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" y="0" fill="#00843D"/><rect y="6.66" width="30" height="6.66" fill="#fff"/><rect y="13.32" width="30" height="6.68" fill="#000"/><rect width="8" height="20" fill="#CE1126"/></svg>',
+  "Saudi Arabia":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#006C35"/></svg>',
+  "Germany":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" fill="#000"/><rect y="6.66" width="30" height="6.66" fill="#DD0000"/><rect y="13.32" width="30" height="6.68" fill="#FFCE00"/></svg>',
+  "France":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>',
+  "UK":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="3"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="5"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="3"/></svg>',
+  "Qatar":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#8A1538"/><rect width="9" height="20" fill="#fff"/></svg>',
+  "EU":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#003399"/><circle cx="15" cy="10" r="5" fill="none" stroke="#FFCC00" stroke-width="1.4" stroke-dasharray="0.55 2.05"/></svg>',
+  "China":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#DE2910"/><circle cx="6" cy="6" r="2.4" fill="#FFDE00"/></svg>',
+  "Egypt":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" fill="#CE1126"/><rect y="6.66" width="30" height="6.66" fill="#fff"/><rect y="13.32" width="30" height="6.68" fill="#000"/><circle cx="15" cy="10" r="2" fill="#C09300"/></svg>',
+  "Oman":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.66" fill="#DB161B"/><rect y="13.32" width="30" height="6.68" fill="#008000"/><rect width="8" height="20" fill="#DB161B"/></svg>',
+  "Italy":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>',
+  "Global":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#E8EEF4"/><circle cx="15" cy="10" r="7" fill="none" stroke="#717171" stroke-width="1.1"/><path d="M8 10h14M15 3v14M9.5 6q5.5 4 11 0M9.5 14q5.5-4 11 0" fill="none" stroke="#717171" stroke-width="0.8"/></svg>'
+};
+
+/* Simple thumbnail illustrations per chain (renderable SVG, brand-safe) */
+function thumbSVG(chain, seed){
+  const g = ['#D2D2D1','#A5A5A4','#777776'][seed % 3];
+  const scenes = {
+    market:      `<rect width="240" height="150" fill="#F2EEE9"/><g fill="${g}"><rect x="24" y="90" width="26" height="40"/><rect x="60" y="70" width="26" height="60"/><rect x="96" y="50" width="26" height="80"/><rect x="132" y="64" width="26" height="66"/><rect x="168" y="40" width="26" height="90"/></g><rect x="0" y="130" width="240" height="2" fill="#C6B3A8"/>`,
+    automakers:  `<rect width="240" height="150" fill="#ECECEC"/><g fill="${g}"><rect x="30" y="60" width="180" height="46" rx="6"/><rect x="52" y="44" width="120" height="30" rx="10"/></g><circle cx="72" cy="112" r="14" fill="#343432"/><circle cx="168" cy="112" r="14" fill="#343432"/><circle cx="72" cy="112" r="6" fill="#A5A5A4"/><circle cx="168" cy="112" r="6" fill="#A5A5A4"/>`,
+    distribution:`<rect width="240" height="150" fill="#F9F9F9"/><g fill="${g}"><rect x="20" y="70" width="60" height="50"/><rect x="90" y="55" width="60" height="65"/><rect x="160" y="80" width="60" height="40"/></g><path d="M20 70l30-22 30 22M90 55l30-22 30 22M160 80l30-22 30 22" fill="#777776"/><rect x="0" y="120" width="240" height="3" fill="#A5A5A4"/>`,
+    regulation:  `<rect width="240" height="150" fill="#F2EEE9"/><g fill="${g}"><rect x="90" y="40" width="60" height="8"/><rect x="96" y="48" width="8" height="60"/><rect x="136" y="48" width="8" height="60"/><rect x="72" y="108" width="96" height="10"/></g><circle cx="120" cy="34" r="8" fill="#777776"/><rect x="60" y="60" width="30" height="20" fill="#A5A5A4"/><rect x="150" y="60" width="30" height="20" fill="#A5A5A4"/>`,
+    aftermarket: `<rect width="240" height="150" fill="#ECECEC"/><g fill="${g}"><rect x="70" y="30" width="16" height="70" rx="6" transform="rotate(-38 78 65)"/><circle cx="66" cy="44" r="15"/></g><g fill="#F9F9F9"><circle cx="66" cy="44" r="7"/></g><g fill="#777776"><rect x="150" y="60" width="16" height="70" rx="6" transform="rotate(38 158 95)"/><circle cx="170" cy="116" r="15"/></g><circle cx="170" cy="116" r="7" fill="#ECECEC"/>`
+  };
+  return `<svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${chain} illustration">${scenes[chain]||scenes.market}</svg>`;
+}
+
+/* ============================================================
+   ARTICLES  (age drives Latest vs Older; opinion flag routes to Opinions)
+   date: ISO. Anything within 14 days of "today" is Latest.
+   ============================================================ */
+const TODAY = new Date('2026-07-23');
+let ARTICLES = [
+  // ================= MARKET (incl. consumer trends) =================
+  { id:"m1", chain:"market", type:"news", regions:["Middle East"], country:"Saudi Arabia", date:"2026-07-16", impact:"strong",
+    title:"GCC auto sales seen falling ~11.5% in 2026 as regional tensions bite",
+    summary:"Analysts expect GCC passenger-vehicle sales to drop around 12% in 2026, with Saudi demand down ~7.5%, as higher oil-linked costs, shipping delays and weaker consumer confidence lift prices, thin out affordable stock and extend delivery times.",
+    implication:"RISK: a material demand and supply shock across our core Gulf markets. Revisit volume plans, pricing and delivery commitments, and prioritise scarce affordable stock.",
+    author:"Yallamotor", url:"https://www.yallamotor.com/news/middle-east-tensions-cutting-2026-auto-sales-what-gcc-buyers-should-expect-55351" },
+  { id:"m2", chain:"market", type:"news", regions:["Middle East"], country:"UAE", date:"2026-03-09", impact:"strong",
+    title:"GlobalData cuts 2026 Middle East vehicle sales outlook on geopolitical risk",
+    summary:"GlobalData revised down its 2026 Middle East sales forecast amid escalating regional tensions, warning of delayed purchases, tighter credit, higher logistics and insurance costs, and harder demand forecasting; light-commercial volumes are seen falling ~9% year-on-year.",
+    implication:"RISK: reinforces a cautious near-term stance. Tighten inventory management and build flexibility into supplier and logistics commitments.",
+    author:"GlobalData via Yahoo Finance", url:"https://finance.yahoo.com/news/middle-east-auto-sales-outlook-120637078.html" },
+  { id:"m3", chain:"market", type:"news", regions:["Middle East"], country:"UAE", date:"2026-07-01", impact:"strong",
+    title:"Consumer trend: Gulf buyers favour plug-in hybrids as charging lags and heat cuts EV range",
+    summary:"Regional coverage notes plug-in hybrids are outselling pure EVs in parts of the Gulf as charging infrastructure trails sales growth and summer heat reduces battery range, shifting buyer preference toward hybrids.",
+    implication:"OPPORTUNITY: a clear demand signal to weight PHEV and hybrid stock and adjust ordering mix ahead of competitors.",
+    author:"Arabian Business", url:"https://www.arabianbusiness.com/tags/automotive-industry" },
+  { id:"m4", chain:"market", type:"news", regions:["Middle East","Europe","Rest of World"], country:"Global", date:"2026-07-19", impact:"less",
+    title:"Weekly global car-news roundup: automakers temper all-out EV push",
+    summary:"A weekly industry roundup highlights manufacturers rethinking EV strategies, record Chinese exports and renewed interest in performance combustion cars, with tariffs and import policy reviews a running theme.",
+    implication:"General context on global direction; useful backdrop but no single action for us this fortnight.",
+    author:"TechStory", url:"https://techstory.in/weekly-global-car-news-july-2026-roundup/" },
+  { id:"m5", chain:"market", type:"news", regions:["Middle East"], country:"Egypt", date:"2026-07-12", impact:"strong",
+    title:"Egypt positions as export hub as three carmakers apply to export locally-built vehicles",
+    summary:"Nissan Egypt, GM Egypt and a third manufacturer have applied to begin exporting locally assembled vehicles from Q4 2026, targeting Arab and African markets, as Egypt shifts from import substitution toward export-led manufacturing.",
+    implication:"OPPORTUNITY/RISK: a potential new regional supply source and competitor. Assess sourcing, pricing and competitive implications for our markets.",
+    author:"The Middle East Observer", url:"https://meobserver.news/industry/2026/07/12/egypts-carmakers-gear-up-for-export-expansion/" },
+
+  // ================= AUTOMAKERS =================
+  { id:"a1", chain:"automakers", type:"news", regions:["Rest of World"], country:"China", date:"2026-07-20", impact:"strong",
+    title:"Geely accelerates Middle East expansion, focusing on UAE and wider GCC",
+    summary:"Geely Auto is stepping up its Middle East expansion, centred on the UAE and GCC, after reporting a sharp rise in overseas sales and continued growth in its new-energy vehicle portfolio.",
+    implication:"RISK: intensifying Chinese-brand competition in our markets; may reshape brand availability and pricing in the segments we serve.",
+    author:"Truck and Fleet Middle East", url:"https://truckandfleetme.com/" },
+  { id:"a2", chain:"automakers", type:"news", regions:["Middle East","Europe","Rest of World"], country:"Global", date:"2026-07-21", impact:"less",
+    title:"GM posts higher first-half EPS, narrows EV losses and trims warranty costs",
+    summary:"General Motors reported an 8.6% North American EBIT-adjusted margin, up 2.5 points year-on-year, with first-half EPS about 25% above any prior first half as it cut warranty costs and reduced EV losses.",
+    implication:"Financial-performance update indicating disciplined EV cost management; informative but no direct action for us.",
+    author:"CNBC", url:"https://www.cnbc.com/2026/07/21/general-motors-gm-earnings-q2-2026.html" },
+  { id:"a3", chain:"automakers", type:"news", regions:["Rest of World"], country:"China", date:"2026-07-20", impact:"less",
+    title:"BYD 2025 revenue tops 800bn yuan but profit falls ~19% on price war",
+    summary:"BYD's 2025 revenue passed 800 billion yuan (up ~3.5%) while net profit fell ~19% as a domestic price war compressed margins; its overseas car business earned a far higher gross margin than at home, with strong plug-in hybrid sales.",
+    implication:"Signals continued Chinese price pressure and an export-led profit motive; relevant context for competitive dynamics, not an immediate trigger.",
+    author:"Tridens", url:"https://tridenstechnology.com/byd-sales-statistics/" },
+  { id:"a4", chain:"automakers", type:"news", regions:["Europe"], country:"EU", date:"2026-07-28", impact:"strong",
+    title:"Chinese brands expand European production to sidestep EV tariffs",
+    summary:"Analysis shows major Western automakers moved EV output from China into Europe, cutting the China-made share of their BEV sales from 38% in 2024 to 23% in Q1 2026, while Chinese brands such as BYD, Chery and Leapmotor posted very large European registration gains.",
+    implication:"RISK: local Chinese production could bring more competitive EVs into European channels; monitor exposure for brands and segments we distribute.",
+    author:"The Economy", url:"https://economy.ac/news/2026/07/202607289570" },
+  { id:"a5", chain:"automakers", type:"news", regions:["Middle East","Europe","Rest of World"], country:"Global", date:"2026-06-26", impact:"less",
+    title:"Toyota's multi-pathway strategy validated as electrified sales surge",
+    summary:"Coverage of the most valuable carmakers notes Toyota's electrified (hybrid plus EV) sales rose sharply, supporting its multi-pathway approach rather than an EV-only strategy.",
+    implication:"Reinforces the hybrid-demand thesis relevant to our mix; broadly confirmatory rather than actionable.",
+    author:"U.S. News", url:"https://money.usnews.com/investing/articles/the-10-most-valuable-auto-companies-in-the-world" },
+
+  // ================= DISTRIBUTION =================
+  { id:"d1", chain:"distribution", type:"news", regions:["Middle East"], country:"UAE", date:"2026-06-02", impact:"strong",
+    title:"Al-Futtaim expands Virtual Showroom retail initiative in the GCC",
+    summary:"Al-Futtaim Automotive extended its Virtual Showroom initiative (including a Lexus UAE virtual showroom), pushing digital, customer-centric car retail as BYD adoption grows across the UAE and Saudi Arabia.",
+    implication:"OPPORTUNITY/RISK: a leading regional distributor is setting the retail-innovation bar. Benchmark our omnichannel and digital-showroom capability against it.",
+    author:"Al-Futtaim", url:"https://www.alfuttaim.com/divisions/automotive/" },
+  { id:"d2", chain:"distribution", type:"news", regions:["Middle East"], country:"Saudi Arabia", date:"2025-09-09", impact:"strong",
+    title:"smart enters Saudi Arabia via distribution deal with Juffali Automotive",
+    summary:"smart entered the Saudi market through a general distribution agreement with Juffali Automotive, a distributor with decades of Mercedes-Benz representation, taking smart to 39 markets worldwide.",
+    implication:"OPPORTUNITY/RISK: a template for new-brand entry via an established distributor; relevant to how new EV brands may pick partners in our markets.",
+    author:"Barchart", url:"https://www.barchart.com/story/news/34705147/smart-enters-saudi-arabia-market-through-strategic-partnership-with-juffali-automotive-company" },
+  { id:"d3", chain:"distribution", type:"news", regions:["Middle East"], country:"UAE", date:"2026-05-05", impact:"less",
+    title:"Dubai unveils 22m sq ft Auto Market with 1,500 showrooms",
+    summary:"Dubai announced a 22-million-square-foot Auto Market with around 1,500 showrooms, aiming to become the world's largest automotive trade hub.",
+    implication:"Longer-term retail-landscape shift worth watching; limited immediate action but relevant to future footprint decisions.",
+    author:"Arabian Business", url:"https://www.arabianbusiness.com/tags/automotive-industry" },
+  { id:"d4", chain:"distribution", type:"news", regions:["Rest of World"], country:"China", date:"2026-07-01", impact:"less",
+    title:"Chinese automaker expands sub-dealer network in Saudi Arabia",
+    summary:"A Chinese automaker plans more models in 2026 to build recognition in the premium hybrid SUV category and is expanding its sub-dealer network in Saudi Arabia.",
+    implication:"Competitive network-building in a core market; monitor as a signal of intensifying distribution competition.",
+    author:"Arabian Business", url:"https://www.arabianbusiness.com/tags/automotive-industry" },
+  { id:"d5", chain:"distribution", type:"news", regions:["Middle East"], country:"Qatar", date:"2026-05-05", impact:"less",
+    title:"Al-Futtaim consolidates GAC sales, service and parts in new Qatar site",
+    summary:"Through subsidiary DOMASCO, Al-Futtaim opened a combined showroom and service centre for GAC Motor in Qatar, consolidating sales, service and spare parts in one location.",
+    implication:"Illustrative of one-stop distribution formats in the region; useful reference for our own network planning.",
+    author:"Al-Futtaim", url:"https://alfuttaim.com/our-brands/gac-motor" },
+
+  // ================= AFTERMARKET (used cars, hire/rental, maintenance & repair) =================
+  { id:"f1", chain:"aftermarket", type:"news", regions:["Middle East"], country:"Oman", date:"2026-06-09", impact:"strong",
+    title:"Isuzu Oman delivers 125 vehicles to Budget Rent a Car in fleet deal",
+    summary:"Isuzu Oman handed over 125 D-MAX pickups and MU-X SUVs to Budget Rent a Car, extending a 15-year distributor–rental relationship as part of a fleet expansion programme.",
+    implication:"OPPORTUNITY: a live example of distributor–rental fleet supply we can replicate to secure volume and manage remarketing.",
+    author:"Truck and Fleet Middle East", url:"https://truckandfleetme.com/news/isuzu-oman-delivers-125-vehicles-to-budget-rent-a-car-in-fleet-expansion-deal/" },
+  { id:"f2", chain:"aftermarket", type:"news", regions:["Middle East"], country:"UAE", date:"2025-06-30", impact:"strong",
+    title:"PEUGEOT Middle East launches car subscription with Invygo and Yelo",
+    summary:"PEUGEOT Middle East (Stellantis) launched a car-subscription service in partnership with mobility platform Invygo and fleet operator Yelo, with vehicles rented through Yelo's operational-lease model in the UAE.",
+    implication:"OPPORTUNITY: shows OEM-backed subscription and flexible-ownership models entering our region; a channel we should evaluate.",
+    author:"Stellantis Media", url:"https://www.media.stellantis.com/me-en/peugeot/press/peugeot-middle-east-launches-new-car-subscription-service-in-partnership-with-invygo-and-yelo" },
+  { id:"f3", chain:"aftermarket", type:"news", regions:["Middle East"], country:"UAE", date:"2026-05-15", impact:"strong",
+    title:"GCC used-car market grows on affordability demand and online platforms",
+    summary:"The GCC used-car market is expanding, led by the UAE (~45% share) and Saudi Arabia (~35%), driven by demand for affordable vehicles, a shift to online sales and streamlined registration; Al-Futtaim and Abdul Latif Jameel are named as leaders.",
+    implication:"OPPORTUNITY: a growing margin pool where our peers are strong. Supports investment in certified used-car and online remarketing capability.",
+    author:"Market Research Future", url:"https://www.marketresearchfuture.com/reports/gcc-used-car-market-26890" },
+  { id:"f4", chain:"aftermarket", type:"news", regions:["Europe"], country:"Italy", date:"2026-05-05", impact:"less",
+    title:"Enterprise partners with Locauto Rent to extend European franchise network",
+    summary:"Enterprise added Locauto Rent (a 5,000-vehicle, 28-location Italian operator) to its franchise network, taking the Enterprise brand to about 85% of the European car-rental market.",
+    implication:"Rental-sector consolidation in Europe; useful context for fleet-channel dynamics, limited direct impact today.",
+    author:"Auto Rental News", url:"https://www.autorentalnews.com/news/enterprise-partners-with-locauto-rent-in-italy-for-franchise-network" },
+  { id:"f5", chain:"aftermarket", type:"news", regions:["Middle East"], country:"UAE", date:"2026-03-04", impact:"less",
+    title:"Middle East car-rental market growing ~5.6% CAGR toward 2031",
+    summary:"The Middle East car-rental market (~$3.4bn in 2026) is projected to grow ~5.6% annually to ~$4.5bn by 2031, with online bookings dominant and EV fleets constrained by insurance capacity and uneven charging.",
+    implication:"Supportive backdrop for fleet-supply and buy-back opportunities; monitor EV-fleet constraints as we structure deals.",
+    author:"Mordor Intelligence", url:"https://www.mordorintelligence.com/industry-reports/middle-east-car-rental-market" },
+
+  // ================= REGULATION =================
+  { id:"r1", chain:"regulation", type:"news", regions:["Europe"], country:"EU", date:"2026-07-13", impact:"strong",
+    title:"T&E: EU tariffs cut China-made EV share; group urges tariffs on Chinese batteries",
+    summary:"Transport & Environment analysis finds China-made cars fell to 17% of the EU BEV market in Q1 2026 from a 22% peak, driven by Western brands reshoring; T&E calls for further measures including tariffs on Chinese batteries.",
+    implication:"RISK/OPPORTUNITY: further trade measures would reshape EV sourcing and landed cost. Track by model origin for lines we distribute into Europe.",
+    author:"Transport & Environment", url:"https://www.transportenvironment.org/articles/are-the-ev-tariffs-working-western-carmakers-shifted-production-to-eu-but-chinese-brands-continue-to-grow-analysis" },
+  { id:"r2", chain:"regulation", type:"news", regions:["Europe"], country:"EU", date:"2026-07-02", impact:"strong",
+    title:"EU maintains tariffs of up to 35% on Chinese EVs atop existing 10% duty",
+    summary:"The EU's tariffs of up to 35% on Chinese-made EVs remain in force on top of the existing 10% duty, pushing Chinese producers toward local European production and joint ventures rather than exports.",
+    implication:"RISK: directly affects the cost and availability of Chinese-origin EVs in Europe. Confirm exposure and pricing for any such models in our range.",
+    author:"Centre for European Reform", url:"https://www.cer.eu/insights/eus-drive-china-what-ev-tariffs-mean-europe" },
+  { id:"r3", chain:"regulation", type:"news", regions:["Europe"], country:"EU", date:"2026-07-20", impact:"strong",
+    title:"EU flags grids as electrification bottleneck; targets public-charging rollout",
+    summary:"The European Commission identified electricity grids as a bottleneck for electrification and promised to standardise vehicle-to-grid technology, while noting nearly all member states now meet fleet-based public-charging targets.",
+    implication:"OPPORTUNITY: enabling regulation that supports EV adoption and charging services; relevant to EV lines and any charging partnerships in Europe.",
+    author:"Transport & Environment", url:"https://www.transportenvironment.org/articles/are-the-ev-tariffs-working-western-carmakers-shifted-production-to-eu-but-chinese-brands-continue-to-grow-analysis" },
+  { id:"r4", chain:"regulation", type:"news", regions:["Europe"], country:"UK", date:"2026-01-01", impact:"strong",
+    title:"UK–EU EV rules-of-origin relief extended to end-2026 before tighter 2027 thresholds",
+    summary:"The UK–EU agreement postponed stricter rules-of-origin and a 10% EV tariff, with 40% vehicle and 30% battery local content required until 2027, rising to 55% vehicle and 65–70% battery content from 2027.",
+    implication:"RISK: the 2027 step-up could add tariffs to EVs traded between the UK and EU. Plan sourcing and pricing for any UK/EU cross-border EV lines ahead of the change.",
+    author:"trade.gov Market Intelligence", url:"https://www.trade.gov/market-intelligence/eu-member-states-approve-ev-tariff-suspension" },
+  { id:"r5", chain:"regulation", type:"news", regions:["Middle East","Europe","Rest of World"], country:"Global", date:"2026-08-01", impact:"less",
+    title:"Research: EU–China EV tariffs to reshape adoption and total cost of ownership",
+    summary:"A Nature Energy study models how EU tariffs on Chinese EVs propagate through total cost of ownership, projecting 2035 EU EV share between ~56% and ~69% depending on whether automakers withdraw or onshore low-cost production.",
+    implication:"Longer-horizon evidence rather than an immediate trigger; useful for scenario planning on EV mix and pricing.",
+    author:"Nature Energy", url:"https://www.nature.com/articles/s41560-026-02105-7" },
+
+  // ================= OPINIONS =================
+  { id:"o1", chain:"distribution", type:"opinion", regions:["Middle East"], country:"UAE", date:"2026-04-20", impact:"strong",
+    title:"Al-Futtaim's Antoine Barthes on building 'choice-rich' mobility in the GCC",
+    summary:"In an interview, Al-Futtaim Automotive's Antoine Barthes argues the GCC is moving toward 'choice-rich' mobility — a wider spread of powertrains, brands and ownership models — and that distributors must broaden their portfolios accordingly.",
+    implication:"A distributor-leadership view that supports diversifying our brand and powertrain mix and expanding beyond pure new-car sales.",
+    author:"Antoine Barthes, Al-Futtaim Automotive (Gulf Business)", url:"https://gulfbusiness.com/en/2026/interviews/al-futtaim-automotives-antoine-barthes-on-choice-rich-mobility-in-the-gcc/" },
+  { id:"o2", chain:"regulation", type:"opinion", regions:["Europe"], country:"EU", date:"2026-07-02", impact:"strong",
+    title:"Are EV tariffs the right answer to Europe's competitiveness problem?",
+    summary:"A Centre for European Reform analyst argues the EU is right to worry about Chinese subsidies but questions whether tariffs are the right remedy, suggesting they may mainly accelerate Chinese local production in Europe.",
+    implication:"A policy perspective that shapes how we read the durability of EV tariffs and Chinese-brand localisation in our European markets.",
+    author:"Anton Spisak, Centre for European Reform", url:"https://www.cer.eu/insights/eus-drive-china-what-ev-tariffs-mean-europe" },
+  { id:"o3", chain:"automakers", type:"opinion", regions:["Rest of World"], country:"China", date:"2026-06-10", impact:"less",
+    title:"BYD's CEO: we can catch Toyota to become the world's No. 1 automaker",
+    summary:"BYD founder Wang Chuanfu argues that after dropping pure-ICE cars in 2022, BYD's bet on EVs and plug-in hybrids has paid off, and that new battery and charging technology can make it the world's largest automaker within five years.",
+    implication:"A view on Chinese ambition and technology direction; useful strategic context rather than an immediate action.",
+    author:"Wang Chuanfu, BYD (Electrek)", url:"https://electrek.co/2026/06/10/byd-outsold-ford-thinks-it-can-catch-toyota-for-no-1/" }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORE_KEY = "mobility_saved_v2";
+let saved = {};
+try { const raw = window.localStorage ? localStorage.getItem(STORE_KEY) : null; if (raw) saved = JSON.parse(raw); } catch(e){ saved = {}; }
+function persist(){ try { if (window.localStorage) localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e){} }
+
+let view = "latest";        // latest | older | opinions | saved
+let chain = "market";       // market | automakers | distribution | regulation
+let geo = "";               // "" | Global | Middle East | Europe | Rest of World
+let imp = "";               // "" | strong | less
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function daysOld(iso){ return (TODAY - new Date(iso)) / 86400000; }
+function isLatest(a){ return daysOld(a.date) <= 14; }
+function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function flag(c){ return FLAGS[c] || FLAGS.Global; }
+function savedList(){ return ARTICLES.filter(a => saved[a.id]); }
+
+// Region is stored as an array of regions an article is relevant to.
+// Accept legacy single-string `region` too, for feed compatibility.
+function regionsOf(a){
+  if (Array.isArray(a.regions)) return a.regions;
+  if (typeof a.region === 'string') {
+    return a.region === 'Global'
+      ? ["Middle East","Europe","Rest of World"]
+      : [a.region];
+  }
+  return [];
+}
+function matchesGeo(a, sel){ return !sel || regionsOf(a).includes(sel); }
+function regionLabel(a){
+  const r = regionsOf(a);
+  const core = ["Middle East","Europe","Rest of World"];
+  if (core.every(x => r.includes(x))) return "Global";
+  return r.join(" · ");
+}
+
+/* ============================================================
+   RENDER CARD
+   ============================================================ */
+function card(a, idx){
+  const isSaved = !!saved[a.id];
+  const chainLabel = a.type === "opinion" ? "Opinion" : CHAINS[a.chain].title;
+  const impBadge = a.impact === 'strong'
+    ? '<span class="tag tag--imp-strong"><span class="dot" aria-hidden="true"></span> Strong implication</span>'
+    : '<span class="tag tag--imp-less">Less implication</span>';
+  return `
+  <article class="article ${a.type==='opinion'?'article--opinion':''}">
+    <div class="article__thumb">${thumbSVG(a.chain, idx)}</div>
+    <div class="article__body">
+      <div class="article__meta">
+        <span class="tag tag--chain">${esc(chainLabel)}</span>
+        ${impBadge}
+        <span class="tag tag--flag">${flag(a.country)} ${esc(a.country)}</span>
+        <span class="tag">${esc(regionLabel(a))}</span>
+      </div>
+      <h2 class="article__title">${esc(a.title)}</h2>
+      <p class="article__summary">${esc(a.summary)}</p>
+      <p class="article__implication"><strong>Why it matters to us:</strong> ${esc(a.implication)}</p>
+      <div class="article__foot">
+        <span class="article__byline"><span class="src">${esc(a.author)}</span> · ${fmtDate(a.date)}${a.url ? ` · <a href="${esc(a.url)}" target="_blank" rel="noopener">Read source</a>` : ''}</span>
+        <button class="save-btn" data-save="${a.id}" aria-pressed="${isSaved}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-5-7 5V4a1 1 0 0 1 1-1z"/></svg>
+          ${isSaved ? 'Saved' : 'Save'}
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+/* ============================================================
+   RENDER VIEW
+   ============================================================ */
+function render(){
+  const subnav = document.getElementById('subnav');
+  const filterbar = document.getElementById('filterbar');
+  const list = document.getElementById('articleList');
+  const eyebrow = document.getElementById('ph-eyebrow');
+  const title = document.getElementById('ph-title');
+  const desc = document.getElementById('ph-desc');
+  const count = document.getElementById('resultsCount');
+
+  let items = [];
+  const showChain = (view === 'latest' || view === 'older');
+
+  subnav.style.display = showChain ? 'flex' : 'none';
+  filterbar.style.display = (showChain || view === 'opinions') ? 'flex' : 'none';
+
+  if (view === 'saved'){
+    eyebrow.textContent = "Saved Articles";
+    title.textContent = "Saved Articles";
+    desc.textContent = "Every article you've saved, across news and opinions. Saved items persist on this device.";
+    items = savedList().sort((x,y)=> new Date(y.date) - new Date(x.date));
+  } else if (view === 'opinions'){
+    eyebrow.textContent = "Opinions";
+    title.textContent = "Opinions";
+    desc.textContent = "Perspectives from industry thought leaders — commentary and analysis, not reported news.";
+    items = ARTICLES.filter(a => a.type === 'opinion');
+    items = items.filter(a => matchesGeo(a, geo));
+    if (imp) items = items.filter(a => a.impact === imp);
+    items.sort((x,y)=> new Date(y.date) - new Date(x.date));
+  } else {
+    eyebrow.textContent = (view==='latest'?'Latest News':'Older News') + " · " + CHAINS[chain].title;
+    title.textContent = CHAINS[chain].title;
+    desc.textContent = CHAINS[chain].desc;
+    items = ARTICLES.filter(a => a.type === 'news' && a.chain === chain && (view==='latest'? isLatest(a) : !isLatest(a)));
+    items = items.filter(a => matchesGeo(a, geo));
+    if (imp) items = items.filter(a => a.impact === imp);
+    items.sort((x,y)=> new Date(y.date) - new Date(x.date));
+  }
+
+  if (view === 'saved'){
+    count.innerHTML = items.length ? `<strong>${items.length}</strong> saved article${items.length>1?'s':''}` : "";
+  } else {
+    const bits = [];
+    if (geo) bits.push(geo);
+    if (imp) bits.push(imp === 'strong' ? 'strong implication' : 'less implication');
+    const suffix = bits.length ? ` · ${bits.join(' · ')}` : "";
+    count.innerHTML = `<strong>${items.length}</strong> article${items.length!==1?'s':''}${suffix}`;
+  }
+
+  if (items.length){
+    list.innerHTML = items.map((a,i)=>card(a,i)).join("");
+  } else {
+    const f = (geo?` in ${geo}`:"") + (imp? (geo?', ':' ') + (imp==='strong'?'with strong implication':'with less implication') : "");
+    let msg = "No articles here yet.";
+    if (view==='saved') msg = "You haven't saved anything yet. Tap the Save button on any article to keep it here.";
+    else if (view==='latest') msg = "No articles in the last two weeks for this section" + f + ". Try Older News or a different filter.";
+    else if (view==='older') msg = "No older articles for this section" + f + ".";
+    else if (view==='opinions') msg = "No opinion pieces" + f + " right now.";
+    list.innerHTML = `<div class="empty">${msg}</div>`;
+  }
+
+  const sc = document.getElementById('savedCount');
+  const n = savedList().length;
+  sc.textContent = n; sc.style.display = n ? 'inline-block' : 'none';
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+document.querySelectorAll('.nav__link').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    view = btn.dataset.view;
+    document.querySelectorAll('.nav__link').forEach(b=> b.setAttribute('aria-current', b===btn?'true':'false'));
+    geo = ""; imp = "";
+    document.querySelectorAll('#geobar .geo-pill').forEach(p=> p.setAttribute('aria-pressed', p.dataset.geo===''?'true':'false'));
+    document.querySelectorAll('#impbar .geo-pill').forEach(p=> p.setAttribute('aria-pressed', p.dataset.imp===''?'true':'false'));
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+document.querySelectorAll('.subnav__link').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    chain = btn.dataset.chain;
+    document.querySelectorAll('.subnav__link').forEach(b=> b.setAttribute('aria-current', b===btn?'true':'false'));
+    render();
+  });
+});
+
+document.querySelectorAll('#geobar .geo-pill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    geo = btn.dataset.geo;
+    document.querySelectorAll('#geobar .geo-pill').forEach(b=> b.setAttribute('aria-pressed', b===btn?'true':'false'));
+    render();
+  });
+});
+
+document.querySelectorAll('#impbar .geo-pill').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    imp = btn.dataset.imp;
+    document.querySelectorAll('#impbar .geo-pill').forEach(b=> b.setAttribute('aria-pressed', b===btn?'true':'false'));
+    render();
+  });
+});
+
+document.getElementById('articleList').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-save]');
+  if (!btn) return;
+  const id = btn.dataset.save;
+  if (saved[id]) delete saved[id]; else saved[id] = true;
+  persist();
+  render();
+});
+
+/* INIT */
+render();
+
+/* ============================================================
+   OPTIONAL LIVE FEED (Option B)
+   If an articles.json sits next to this file (produced by
+   fetch_feeds.py on a schedule), load it and re-render. If it's
+   absent or blocked (e.g. opened via file://), we silently keep
+   the built-in snapshot above. This lets the same file work both
+   as a standalone snapshot and as a live-fed dashboard.
+   ============================================================ */
+(function tryLoadFeed(){
+  fetch('articles.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      const incoming = Array.isArray(data) ? data : (data && data.articles);
+      if (incoming && incoming.length) {
+        ARTICLES = incoming;
+        if (data.generated) {
+          const d = new Date(data.generated);
+          if (!isNaN(d)) document.getElementById('navEdition').textContent =
+            'Updated ' + d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + ' · live feed';
+        }
+        render();
+      }
+    })
+    .catch(() => { /* no feed available — keep built-in snapshot */ });
+})();
+</script>
+</body>
+</html>
