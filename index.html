@@ -85,14 +85,6 @@ html, body { font-family: var(--ds-font-sans); color: var(--ds-surface-text); ba
 .nav__link:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: -2px; }
 .nav__count { font-size: 12px; background: var(--ds-color-company-red); color: var(--ds-text-on-color); border-radius: 45px; padding: 1px 7px; margin-left: var(--ds-space-02); vertical-align: middle; }
 .nav__spacer { flex: 1; }
-.nav__export {
-  font-family: var(--ds-font-sans); font-size: 13px; font-weight: 700; cursor: pointer;
-  background: var(--ds-color-white); color: var(--ds-text-dark); border: 1px solid var(--ds-stroke);
-  border-radius: 6px; padding: var(--ds-space-02) var(--ds-space-04); min-height: 38px; margin-right: var(--ds-space-04);
-  white-space: nowrap;
-}
-.nav__export:hover { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
-.nav__export:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
 .nav__edition { font-size: 13px; font-weight: 700; color: var(--ds-text-regular); white-space: nowrap; }
 
 /* ===== Level 2: value-chain sub nav ===== */
@@ -152,8 +144,6 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
 .article__meta { display: flex; flex-wrap: wrap; gap: var(--ds-space-03); align-items: center; margin-bottom: var(--ds-space-03); }
 .tag { display: inline-flex; align-items: center; gap: var(--ds-space-02); font-size: 12px; font-weight: 700; line-height: 16px; padding: 3px var(--ds-space-03); border: 1px solid var(--ds-stroke); background: var(--ds-gray-x-light); color: var(--ds-text-dark); text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
 .tag--chain { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); background: var(--ds-color-white); }
-.tag--flag { padding-left: var(--ds-space-02); text-transform: none; letter-spacing: 0; }
-.tag__flag { width: 18px; height: 12px; flex-shrink: 0; display: inline-block; vertical-align: middle; border: 1px solid var(--ds-gray-light); }
 .article__title { font-size: 24px; line-height: 30px; font-weight: 700; color: var(--ds-text-black); margin: 0 0 var(--ds-space-03); letter-spacing: -0.01em; }
 .article__titlelink { color: var(--ds-text-black); text-decoration: none; }
 .article__titlelink:hover { color: var(--ds-color-company-red); text-decoration: underline; }
@@ -232,7 +222,6 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
     <button class="nav__link" role="tab" aria-current="false" data-view="pending">Pending Action <span class="nav__count" id="pendingCount" style="display:none">0</span></button>
   </div>
   <div class="nav__spacer"></div>
-  <button class="nav__export" id="exportActions" title="Download proposedactions.json to commit to your repo">Export actions</button>
   <div class="nav__edition" id="navEdition">Snapshot: 23 Jul 2026 · live sources</div>
 </nav>
 
@@ -280,20 +269,6 @@ const CHAINS = {
 };
 const REGIONS = ["Middle East","Europe","Rest of World"];
 
-const FLAGS = {
-  "UAE":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" y="0" fill="#00843D"/><rect y="6.66" width="30" height="6.66" fill="#fff"/><rect y="13.32" width="30" height="6.68" fill="#000"/><rect width="8" height="20" fill="#CE1126"/></svg>',
-  "Saudi Arabia":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#006C35"/></svg>',
-  "Germany":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" fill="#000"/><rect y="6.66" width="30" height="6.66" fill="#DD0000"/><rect y="13.32" width="30" height="6.68" fill="#FFCE00"/></svg>',
-  "France":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>',
-  "UK":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="3"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="5"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="3"/></svg>',
-  "Qatar":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#8A1538"/><rect width="9" height="20" fill="#fff"/></svg>',
-  "EU":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#003399"/><circle cx="15" cy="10" r="5" fill="none" stroke="#FFCC00" stroke-width="1.4" stroke-dasharray="0.55 2.05"/></svg>',
-  "China":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#DE2910"/><circle cx="6" cy="6" r="2.4" fill="#FFDE00"/></svg>',
-  "Egypt":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="6.66" fill="#CE1126"/><rect y="6.66" width="30" height="6.66" fill="#fff"/><rect y="13.32" width="30" height="6.68" fill="#000"/><circle cx="15" cy="10" r="2" fill="#C09300"/></svg>',
-  "Oman":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.66" fill="#DB161B"/><rect y="13.32" width="30" height="6.68" fill="#008000"/><rect width="8" height="20" fill="#DB161B"/></svg>',
-  "Italy":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/></svg>',
-  "Global":'<svg class="tag__flag" viewBox="0 0 30 20"><rect width="30" height="20" fill="#E8EEF4"/><circle cx="15" cy="10" r="7" fill="none" stroke="#717171" stroke-width="1.1"/><path d="M8 10h14M15 3v14M9.5 6q5.5 4 11 0M9.5 14q5.5-4 11 0" fill="none" stroke="#717171" stroke-width="0.8"/></svg>'
-};
 
 /* Simple thumbnail illustrations per chain (renderable SVG, brand-safe) */
 function thumbSVG(chain, seed){
@@ -492,7 +467,6 @@ function daysOld(iso){ return (TODAY - new Date(iso)) / 86400000; }
 function isLatest(a){ return daysOld(a.date) <= 14; }
 function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function flag(c){ return FLAGS[c] || FLAGS.Global; }
 function savedList(){ return ARTICLES.filter(a => saved[a.id]); }
 function pendingList(){ return ARTICLES.filter(a => actions[a.id] && actions[a.id].trim()); }
 // Strip trailing "  Publisher" / " - Publisher" tags feeds append to headlines.
@@ -541,7 +515,6 @@ function card(a, idx){
     <div class="article__body">
       <div class="article__meta">
         <span class="tag tag--chain">${esc(chainLabel)}</span>
-        <span class="tag tag--flag">${flag(a.country)} ${esc(a.country)}</span>
         <span class="tag">${esc(regionLabel(a))}</span>
       </div>
       <h2 class="article__title">${titleHtml}</h2>
@@ -704,26 +677,6 @@ document.getElementById('articleList').addEventListener('click', e=>{
 
 /* INIT */
 render();
-
-/* Export proposed actions as proposedactions.json for committing to the repo */
-document.getElementById('exportActions').addEventListener('click', ()=>{
-  const clean = {};
-  Object.keys(actions).forEach(id => {
-    const t = (actions[id] || '').toString().trim();
-    if (t) clean[id] = t;
-  });
-  const payload = {
-    generated: new Date().toISOString(),
-    count: Object.keys(clean).length,
-    actions: clean
-  };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'proposedactions.json';
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(a.href);
-});
 
 /* ============================================================
    OPTIONAL LIVE FEED (Option B) + SHARED PROPOSED ACTIONS
