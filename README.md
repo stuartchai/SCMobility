@@ -102,7 +102,7 @@ Each article is an object:
                               // type:  news
   region,                     // one bucket: "Middle East" | "Europe" | "Global"
   date,                       // ISO date; drives Latest (<=14d) vs Older
-  title, summary,             // title is cleaned of trailing publisher tags
+  title, summary,             // both cleaned of trailing source tags / entities
   author, url                 // source attribution; url backs the headline link
 }
 ```
@@ -160,10 +160,13 @@ The script derives, per item:
 - **region** — one mutually-exclusive bucket: "Middle East" (ME only),
   "Europe" (Europe only), or "Global" (multi-region, outside ME/Europe, or
   unclear).
-- **title** — cleaned of trailing publisher tags. Google News' standard
-  " - Publisher" suffix is split off, and `clean_title()` additionally strips
-  publisher names appended after a non-breaking/double space (e.g. the
-  "…  Eurasia Review" case) or a stray dash/pipe.
+- **title & summary** — both cleaned of trailing publisher/source tags.
+  Google News' standard " - Publisher" suffix is split off, HTML entities like
+  `&nbsp;` and `&amp;` are decoded to real characters, and a trailing source
+  name appended after a non-breaking/double space (e.g. "…&nbsp;&nbsp;Pulse
+  Ghana" or "…  Eurasia Review") or a stray dash/pipe is stripped. The same
+  cleaning runs in the front-end at display time, so an `articles.json` produced
+  by an older script still renders clean without regenerating.
 - **impact / implication** — still emitted for backward compatibility, with a
   `REVIEW:` placeholder, but **no longer shown** by the front-end.
 

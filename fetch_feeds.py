@@ -51,6 +51,7 @@ especially the implication (strong/less) flag, which drives the "so-what".
 import argparse
 import datetime as dt
 import hashlib
+import html as html_lib
 import json
 import re
 import sys
@@ -192,21 +193,34 @@ def publisher_from_google_title(title):
     return title.strip(), ""
 
 
-def clean_title(title):
-    """Remove residual publisher tags some feeds append to headlines.
+def _decode_and_normalise(s):
+    """Turn HTML entities (&nbsp;, &amp;, …) into real characters and collapse
+    any non-breaking / repeated spaces down to single spaces. This is the step
+    that was missing: feeds often emit the literal text '&nbsp;&nbsp;' before a
+    trailing source name, which earlier code never decoded."""
+    s = html_lib.unescape(s or "")      # &nbsp; -> \xa0, &amp; -> &, etc.
+    s = s.replace("\u00a0", " ")         # nbsp char -> normal space
+    return s
 
-    publisher_from_google_title() handles the standard ' - Publisher' form,
-    but some sources (e.g. Eurasia Review) append the publisher after a
-    non-breaking space or a double space, which slips through. This strips:
-      * a trailing '  Publisher' or ' \xa0Publisher' (2+ spaces / nbsp), and
-      * a trailing ' - / – / — / | Publisher' that survived earlier splitting.
-    The publisher name is assumed to be a short (<=40 char) tail."""
-    t = title.replace("\u00a0", " ")
-    # " - Publisher" / " | Publisher" style
-    t = re.sub(r"\s+[-–—|]\s+[^-–—|]{1,40}$", "", t)
-    # "  Publisher" (two or more spaces before a capitalised short tail)
-    t = re.sub(r"\s{2,}[A-Z][\w.& ]{1,40}$", "", t)
-    return t.strip()
+
+def _strip_source_tail(s):
+    """Strip a trailing publisher/source tag appended after a separator.
+    Handles ' - Publisher', ' | Publisher', and the '  Publisher' (2+ spaces)
+    form that Google News and others use. Publisher assumed to be a short tail."""
+    s = re.sub(r"\s+[-–—|]\s+[^-–—|]{1,40}$", "", s)   # " - Source" / " | Source"
+    s = re.sub(r"\s{2,}[A-Z][\w.& ]{1,40}$", "", s)     # "  Source" (double space)
+    return s.strip()
+
+
+def clean_title(title):
+    """Decode entities, normalise spaces, then strip a trailing source tag."""
+    return _strip_source_tail(_decode_and_normalise(title))
+
+
+def clean_summary(summary):
+    """Same treatment for the summary/snippet, which can also carry a
+    '…&nbsp;&nbsp;Source' tail from the feed."""
+    return _strip_source_tail(_decode_and_normalise(summary))
 
 
 # ---------------------------------------------------------------------------
@@ -223,7 +237,7 @@ def build(since=SINCE_DEFAULT, max_per_feed=25):
         for entry in feed.entries[:max_per_feed]:
             raw_title = entry.get("title", "").strip()
             link = entry.get("link", "").strip()
-            summary = re.sub(r"<[^>]+>", "", entry.get("summary", "")).strip()
+            summary = clean_summary(re.sub(r"<[^>]+>", "", entry.get("summary", "")))
 
             title, gpub = publisher_from_google_title(raw_title)
             author = gpub or source_label

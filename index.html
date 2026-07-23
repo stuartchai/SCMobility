@@ -446,14 +446,23 @@ function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB',{day:'num
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function savedList(){ return ARTICLES.filter(a => saved[a.id]); }
 function pendingList(){ return ARTICLES.filter(a => actions[a.id] && actions[a.id].trim()); }
-// Strip trailing "  Publisher" / " - Publisher" tags feeds append to headlines.
-function cleanTitle(t){
-  return String(t || "")
-    .replace(/\u00a0/g, ' ')          // nbsp -> space
-    .replace(/\s+[-–—|]\s+[^-–—|]{1,40}$/, '')  // " - Publisher" style suffix
-    .replace(/\s{2,}[A-Z][\w.& ]{1,40}$/, '')   // "  Publisher" (double-space) suffix
+// Decode HTML entities (&nbsp;, &amp;, …) into real characters. Some feeds
+// emit the literal text "&nbsp;&nbsp;Source" which earlier code left intact.
+function decodeEntities(s){
+  const ta = document.createElement('textarea');
+  ta.innerHTML = String(s || "");
+  return ta.value;
+}
+// Decode, normalise spaces, then strip a trailing "  Source" / " - Source" tag.
+function cleanText(t){
+  return decodeEntities(t)
+    .replace(/\u00a0/g, ' ')                    // nbsp char -> space
+    .replace(/\s+[-–—|]\s+[^-–—|]{1,40}$/, '')  // " - Source" style suffix
+    .replace(/\s{2,}[A-Z][\w.& ]{1,40}$/, '')   // "  Source" (double-space) suffix
+    .replace(/\s{2,}/g, ' ')                    // collapse leftover runs
     .trim();
 }
+function cleanTitle(t){ return cleanText(t); }
 
 // Each article maps to exactly ONE bucket for filtering/labelling:
 //   "Middle East" — relevant to Middle East only
@@ -498,7 +507,7 @@ function card(a, idx){
         <span class="tag">${esc(regionLabel(a))}</span>
       </div>
       <h2 class="article__title">${titleHtml}</h2>
-      <p class="article__summary">${esc(a.summary)}</p>
+      <p class="article__summary">${esc(cleanText(a.summary))}</p>
       <div class="article__foot">
         <span class="article__byline"><span class="src">${esc(a.author)}</span> · ${fmtDate(a.date)}</span>
         <button class="save-btn" data-save="${a.id}" aria-pressed="${isSaved}">
