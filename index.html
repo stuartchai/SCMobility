@@ -85,6 +85,14 @@ html, body { font-family: var(--ds-font-sans); color: var(--ds-surface-text); ba
 .nav__link:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: -2px; }
 .nav__count { font-size: 12px; background: var(--ds-color-company-red); color: var(--ds-text-on-color); border-radius: 45px; padding: 1px 7px; margin-left: var(--ds-space-02); vertical-align: middle; }
 .nav__spacer { flex: 1; }
+.nav__export {
+  font-family: var(--ds-font-sans); font-size: 13px; font-weight: 700; cursor: pointer;
+  background: var(--ds-color-white); color: var(--ds-text-dark); border: 1px solid var(--ds-stroke);
+  border-radius: 6px; padding: var(--ds-space-02) var(--ds-space-04); min-height: 38px; margin-right: var(--ds-space-04);
+  white-space: nowrap;
+}
+.nav__export:hover { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
+.nav__export:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
 .nav__edition { font-size: 13px; font-weight: 700; color: var(--ds-text-regular); white-space: nowrap; }
 
 /* ===== Level 2: value-chain sub nav ===== */
@@ -224,6 +232,7 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
     <button class="nav__link" role="tab" aria-current="false" data-view="pending">Pending Action <span class="nav__count" id="pendingCount" style="display:none">0</span></button>
   </div>
   <div class="nav__spacer"></div>
+  <button class="nav__export" id="exportActions" title="Download proposedactions.json to commit to your repo">Export actions</button>
   <div class="nav__edition" id="navEdition">Snapshot: 23 Jul 2026 · live sources</div>
 </nav>
 
@@ -696,16 +705,39 @@ document.getElementById('articleList').addEventListener('click', e=>{
 /* INIT */
 render();
 
+/* Export proposed actions as proposedactions.json for committing to the repo */
+document.getElementById('exportActions').addEventListener('click', ()=>{
+  const clean = {};
+  Object.keys(actions).forEach(id => {
+    const t = (actions[id] || '').toString().trim();
+    if (t) clean[id] = t;
+  });
+  const payload = {
+    generated: new Date().toISOString(),
+    count: Object.keys(clean).length,
+    actions: clean
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'proposedactions.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+});
+
 /* ============================================================
-   OPTIONAL LIVE FEED (Option B)
-   If an articles.json sits next to this file (produced by
-   fetch_feeds.py on a schedule), load it and re-render. If it's
-   absent or blocked (e.g. opened via file://), we silently keep
-   the built-in snapshot above. This lets the same file work both
-   as a standalone snapshot and as a live-fed dashboard.
+   OPTIONAL LIVE FEED (Option B) + SHARED PROPOSED ACTIONS
+   On load we try two files sitting next to this HTML:
+     • articles.json          — the news feed (from fetch_feeds.py)
+     • proposedactions.json    — shared proposed actions committed to the repo
+   Both are optional. If articles.json is absent/blocked (e.g. opened via
+   file://) we keep the built-in snapshot. proposedactions.json is merged on
+   top of whatever the user already has locally, so committed team actions
+   appear for everyone; local unsaved edits are preserved unless the shared
+   file has an entry for the same article (shared file wins on conflict).
    ============================================================ */
-(function tryLoadFeed(){
-  fetch('articles.json', { cache: 'no-store' })
+(function boot(){
+  const loadArticles = fetch('articles.json', { cache: 'no-store' })
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => {
       const incoming = Array.isArray(data) ? data : (data && data.articles);
@@ -716,10 +748,26 @@ render();
           if (!isNaN(d)) document.getElementById('navEdition').textContent =
             'Updated ' + d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + ' · live feed';
         }
-        render();
       }
     })
-    .catch(() => { /* no feed available — keep built-in snapshot */ });
+    .catch(() => { /* no feed — keep built-in snapshot */ });
+
+  const loadActions = fetch('proposedactions.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      // Accept either { actions: { id: "text" } } or a plain { id: "text" } map.
+      const shared = (data && data.actions) ? data.actions : data;
+      if (shared && typeof shared === 'object') {
+        Object.keys(shared).forEach(id => {
+          const txt = (shared[id] || '').toString().trim();
+          if (txt) actions[id] = txt;   // shared file wins on conflict
+        });
+        persistActions();
+      }
+    })
+    .catch(() => { /* no shared actions file — keep local only */ });
+
+  Promise.allSettled([loadArticles, loadActions]).then(render);
 })();
 </script>
 </body>

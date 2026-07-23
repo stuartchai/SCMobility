@@ -13,7 +13,12 @@ with a real snapshot of current news and can optionally read a live feed.
 2. **`fetch_feeds.py`** — a feed builder that regenerates `articles.json` from
    public RSS feeds on a schedule. Drop the output next to the HTML and the
    dashboard loads it automatically. This is **Option B**.
-3. **`README.md`** — this file.
+3. **`articles.json`** *(you generate this)* — the news feed, produced by
+   `fetch_feeds.py` and hosted next to the HTML.
+4. **`proposedactions.json`** *(optional; you export/commit this)* — shared
+   proposed actions the dashboard reads on load. Produced by the app's
+   **Export actions** button.
+5. **`README.md`** — this file.
 
 ## How the dashboard is organised
 
@@ -25,6 +30,11 @@ with a real snapshot of current news and can optionally read a live feed.
 - **Saved Articles** — anything you've saved, across news and opinions. A live
   count badge shows on the tab. Saved items persist in the browser on the
   device (localStorage).
+- **Pending Action** — every article that has an open proposed action. A live
+  count badge shows on the tab. Marking an action done removes it from here.
+
+Each article card links to its original source **through the headline**
+(the title itself is the link). There is no separate "Read source" link.
 
 **Level 2 — automotive value chain (secondary bar; Latest/Older only)**
 - **Market** — market, macroeconomic and **consumer-trend** developments
@@ -39,23 +49,48 @@ with a real snapshot of current news and can optionally read a live feed.
 - **Regulation** — tariffs, emissions standards, EV mandates, import rules,
   homologation.
 
-**Level 3 — filters (news tabs and Opinions)**
-- **Region:** All / Middle East / Europe / Rest of World. Regions are
-  **overlapping, not exclusive** — an article records every region it's
-  relevant to, so a genuinely global story (e.g. an EU–China tariff) surfaces
-  under Middle East, Europe *and* Rest of World rather than hiding in a
-  separate bucket. Articles relevant to all three show a "Global" label on the
-  card. "All" shows the comprehensive list.
-- **Implication:** All / Strong implication / Less implication.
-  - *Strong* = a concrete opportunity or risk to the distributor — enabling or
-    limiting regulation, supply shocks, channel shifts, partnership openings.
-  - *Less* = informational — e.g. an automaker's financial results, rankings,
-    general market data.
-  Each card carries a badge (a solid red "Strong implication" pill with a dot
-  marker, or a muted grey "Less implication" pill), and the "Why it matters to
-  us" line is written to match.
+**Level 3 — region filter (news tabs and Opinions)**
+- **All / Middle East / Europe / Rest of World.** Regions are **overlapping,
+  not exclusive** — an article records every region it's relevant to, so a
+  genuinely global story (e.g. an EU–China tariff) surfaces under Middle East,
+  Europe *and* Rest of World rather than hiding in a separate bucket. Articles
+  relevant to all three show a "Global" label on the card. "All" shows the
+  comprehensive list.
 
-The two Level 3 filters stack (e.g. Middle East x Strong implication).
+(The earlier "implication" filter and the "Why it matters to us" line have been
+removed.)
+
+## Proposed actions
+
+Each article card has a **Proposed action** text box with **Save** and **Mark
+done** buttons. Saved actions persist in the browser (localStorage) and feed the
+**Pending Action** tab. Marking an action done deletes it.
+
+Because a static site (e.g. GitHub Pages) cannot write files from the browser,
+sharing actions across people works via export + commit:
+
+1. Enter and save actions in the app.
+2. Click **Export actions** (top nav) to download `proposedactions.json`.
+3. Commit that file to the repo next to the HTML.
+4. On load, the app reads `proposedactions.json` and shows those actions for
+   everyone. On conflict, the committed shared file wins over a local entry.
+
+`proposedactions.json` shape:
+
+```json
+{
+  "generated": "2026-07-23T...Z",
+  "count": 2,
+  "actions": {
+    "<articleId>": "Brief the GCC team on hybrid stock weighting",
+    "<articleId>": "Confirm which EU models meet recycled-content thresholds"
+  }
+}
+```
+
+Action text is tied to an article by its `id`. Note that the built-in snapshot
+and the live `articles.json` use different ids, so actions attach to whichever
+dataset is loaded — keep `articles.json` in place for ids to stay stable.
 
 ## Article schema
 
@@ -67,17 +102,18 @@ Each article is an object:
                               // type:  news | opinion
   regions,                    // array, e.g. ["Middle East"] or
                               //   ["Middle East","Europe","Rest of World"] (global)
-  country,                    // flag + label on the card
+  country,                    // a real country when detected (UAE, Germany, China…),
+                              //   otherwise a region label; shown with a flag
   date,                       // ISO date; drives Latest (<=14d) vs Older
-  title, summary,
-  implication,                // the "Why it matters to us" so-what
-  impact,                     // "strong" | "less"
-  author, url                 // source attribution + "Read source" link
+  title, summary,             // title is cleaned of trailing publisher tags
+  author, url                 // source attribution; url backs the headline link
 }
 ```
 
-The front-end also accepts a legacy single `region` string (with `"Global"`
-expanding to all three regions), so a partially-updated feed won't break it.
+`impact` and `implication` fields may still appear in feed output but are no
+longer displayed by the front-end. The front-end also accepts a legacy single
+`region` string (with `"Global"` expanding to all three regions), so a
+partially-updated feed won't break it.
 
 ## Option A — use the snapshot as-is
 
@@ -120,12 +156,24 @@ Automate the pull with cron, a GitHub Action, or any cloud scheduler, e.g.:
 
 ### What `fetch_feeds.py` classifies (and what it doesn't)
 
-The script guesses **chain**, **regions** (multi-match; no clear region -> all
-three) and **implication** from keywords, then writes a `REVIEW:` placeholder
-into each `implication` field. **Review and rewrite the so-what before
-publishing** — the strong/less flag in particular drives the whole point of the
-tool and needs a human judgement about opportunity vs risk for a Middle East /
-Europe distributor.
+The script derives, per item:
+- **chain** — value-chain bucket, from keywords.
+- **regions** — every relevant region (multi-match; no clear region → all three).
+- **country** — a real country when the text names one (UAE, Saudi Arabia,
+  Germany, China, etc.), falling back to a region label only when none is found.
+  This is why the country tag no longer just repeats the region tag. Regional
+  bodies (EU) are prioritised so an EU-policy story isn't mislabelled by an
+  incidental country mention — though keyword rules aren't perfect, so review.
+- **title** — cleaned of trailing publisher tags. Google News' standard
+  " - Publisher" suffix is split off, and `clean_title()` additionally strips
+  publisher names appended after a non-breaking/double space (e.g. the
+  "…  Eurasia Review" case) or a stray dash/pipe.
+- **impact / implication** — still emitted for backward compatibility, with a
+  `REVIEW:` placeholder, but **no longer shown** by the front-end.
+
+All classification is heuristic and a first pass. **Review chain, country and
+region before publishing**, especially where a headline mentions several
+places.
 
 ## Data caveats
 

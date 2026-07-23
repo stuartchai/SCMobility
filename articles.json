@@ -1,8 +1,25 @@
 {
-  "generated": "2026-07-23T12:09:41.421235Z",
+  "generated": "2026-07-23T13:23:26.251613Z",
   "since": "2026-01-01",
-  "count": 121,
+  "count": 120,
   "articles": [
+    {
+      "id": "f0af538296",
+      "chain": "aftermarket",
+      "type": "news",
+      "regions": [
+        "Rest of World"
+      ],
+      "country": "China",
+      "date": "2026-07-23",
+      "title": "Guazi Expands Inspection-Backed Used Car Sourcing from China for Ghana",
+      "summary": "Guazi Expands Inspection-Backed Used Car Sourcing from China for Ghana&nbsp;&nbsp;Pulse Ghana",
+      "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
+      "author": "Pulse Ghana",
+      "impact": "less",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQcF9DLVktZTNrNmhiVER3SUlPR19CdHRVZ3djVGlIa2tNTm9pT2k3eTlQZ2toMUQ4TktnQTM0ZzlKbGpOX2V4WGNtM0l4MHlBdC16dm54cEs1NzVHdkZQcmhIM1JFMjI4Y3ZFWTVhbHFjdzFMWVFxR01GZDhFbHlIQWEyNlNCUDREWkktX2M4TFJRaU8zT0o4cXdZM2lqa25YRnE1NExTeGRzcF9TeWdRZ1A5ZEdndWlwYjItN1ln?oc=5",
+      "source_feed": "Google News"
+    },
     {
       "id": "5c6a1cdb31",
       "chain": "market",
@@ -12,7 +29,7 @@
       ],
       "country": "Middle East",
       "date": "2026-07-23",
-      "title": "Turkey’s Defence Exports To GCC States – Analysis",
+      "title": "Turkey’s Defence Exports To GCC States",
       "summary": "Turkey’s Defence Exports To GCC States – Analysis&nbsp;&nbsp;Eurasia Review",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Eurasia Review",
@@ -27,7 +44,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "Egypt",
       "date": "2026-07-23",
       "title": "Egypt’s auto sales rise 18.2% YoY in May 2026: AMIC",
       "summary": "Egypt’s auto sales rise 18.2% YoY in May 2026: AMIC&nbsp;&nbsp;Zawya",
@@ -44,7 +61,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-07-22",
       "title": "Transense Expands Across Europe With Strategic Distribution Deal",
       "summary": "Transense Expands Across Europe With Strategic Distribution Deal&nbsp;&nbsp;Kalkine Media",
@@ -61,7 +78,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "UK",
       "date": "2026-07-22",
       "title": "News in Brief: VQS extends Honda handover partnership; BYD’s game-changing flash chargers; Jonathan Murray MD of Zemo",
       "summary": "News in Brief: VQS extends Honda handover partnership; BYD’s game-changing flash chargers; Jonathan Murray MD of Zemo&nbsp;&nbsp;brokernews.co.uk",
@@ -167,23 +184,6 @@
       "source_feed": "Google News"
     },
     {
-      "id": "13d50048c7",
-      "chain": "aftermarket",
-      "type": "news",
-      "regions": [
-        "Rest of World"
-      ],
-      "country": "Rest of World",
-      "date": "2026-07-16",
-      "title": "Guazi expands inspection-backed used car sourcing from China for Nigeria",
-      "summary": "Guazi expands inspection-backed used car sourcing from China for Nigeria&nbsp;&nbsp;Daily Post Nigeria",
-      "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
-      "author": "Daily Post Nigeria",
-      "impact": "less",
-      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTE1QYXhSdW1yOS1jalJjY2pJRThzLTA3eU93Z2MwZ1NJODZzNUY2aDFrWTUtSlFScTVJOTdiaXNFU1VYd3NCek42UWdSNTVqVUNzUXlLN1BMNFRaYUdZSnpQUWtGOTZab1ZWT2ZyRk9Qa3FiY3pLN0dnYTVSY3pZcjB2X2twUW5qU0RSTGVILW5KbXFlcjhTMWM1OEhmbWw0U1VmVFVrYUI?oc=5",
-      "source_feed": "Google News"
-    },
-    {
       "id": "3b5693ba0c",
       "chain": "market",
       "type": "news",
@@ -209,7 +209,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-07-13",
       "title": "Guest commentary: Chinese-owned, built-in-America vehicles are coming. Fixed ops will decide whether dealers win",
       "summary": "Guest commentary: Chinese-owned, built-in-America vehicles are coming. Fixed ops will decide whether dealers win&nbsp;&nbsp;Automotive News",
@@ -230,7 +230,7 @@
       ],
       "country": "Global",
       "date": "2026-07-13",
-      "title": "Automotive Engine Market Size, Share, Forecast | CAGR of 3.2%",
+      "title": "Automotive Engine Market Size, Share, Forecast",
       "summary": "Automotive Engine Market Size, Share, Forecast | CAGR of 3.2%&nbsp;&nbsp;Market.us",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Market.us",
@@ -245,7 +245,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "UK",
       "date": "2026-07-06",
       "title": "Skywell seeks new UK distributor after Innovation Automotive exit",
       "summary": "Skywell seeks new UK distributor after Innovation Automotive exit&nbsp;&nbsp;AM-online",
@@ -294,23 +294,6 @@
       "source_feed": "Google News"
     },
     {
-      "id": "1c2db86f3d",
-      "chain": "market",
-      "type": "news",
-      "regions": [
-        "Europe"
-      ],
-      "country": "Europe",
-      "date": "2026-07-01",
-      "title": "AVATR Expands Premium EV Business in Southern Europe With AUTOHELLAS",
-      "summary": "AVATR Expands Premium EV Business in Southern Europe With AUTOHELLAS&nbsp;&nbsp;Fuel Cells Works",
-      "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
-      "author": "Fuel Cells Works",
-      "impact": "less",
-      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOd25YczFGcGZjUzFBWUhUbmRDU1B0MHRmLWR0TFpDTDdPOTByd1NlSHVfWXFNMTE5WW5FOHVUTU96VDFnTlVzYlNlMmstaHJpbzRqWU1QSWZZQWdHYTRZUXYwWEY2RVR3TWV6aEwwOEdiQXRzNXJLcWk5VDJVWWtTc3FId2RpS3pOcDlSaXAtQ2ZKM2lRNEkyUWJUQ3dQWWltQzg0RjdESm55Q0F4YWN5UUJ6WUU?oc=5",
-      "source_feed": "Google News"
-    },
-    {
       "id": "1dd7153a44",
       "chain": "market",
       "type": "news",
@@ -321,7 +304,7 @@
       ],
       "country": "Global",
       "date": "2026-06-30",
-      "title": "Electric Vehicle Battery Market Size, Share | CAGR of 14.6%",
+      "title": "Electric Vehicle Battery Market Size, Share",
       "summary": "Electric Vehicle Battery Market Size, Share | CAGR of 14.6%&nbsp;&nbsp;Market.us",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Market.us",
@@ -372,7 +355,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "Saudi Arabia",
       "date": "2026-06-18",
       "title": "Saudi announces new instant visa rules for emerging businesses",
       "summary": "Saudi announces new instant visa rules for emerging businesses&nbsp;&nbsp;Gulf Business",
@@ -389,7 +372,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "UAE",
       "date": "2026-06-18",
       "title": "Got Dhs1,000? UAE opens government-backed investing to the public",
       "summary": "Got Dhs1,000? UAE opens government-backed investing to the public&nbsp;&nbsp;Gulf Business",
@@ -424,7 +407,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-06-14",
       "title": "Chinese automakers rush to secure European factory space as new EU rules loom",
       "summary": "Chinese automakers rush to secure European factory space as new EU rules loom&nbsp;&nbsp;Automotive News",
@@ -443,7 +426,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "Japan",
       "date": "2026-06-12",
       "title": "Japanese automakers face near $40B hit from U.S. tariffs and EV policy shifts",
       "summary": "Japanese automakers face near $40B hit from U.S. tariffs and EV policy shifts&nbsp;&nbsp;CBT News",
@@ -460,7 +443,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "Japan",
       "date": "2026-06-11",
       "title": "Us policy shifts cost Japan's carmakers $28bn as tariffs and EV reversals hit production",
       "summary": "Us policy shifts cost Japan's carmakers $28bn as tariffs and EV reversals hit production&nbsp;&nbsp;Automotive Manufacturing Solutions",
@@ -479,7 +462,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "Japan",
       "date": "2026-06-11",
       "title": "Trump policy whiplash could slam Japanese carmakers for $40 billion on tariffs, EVs, emissions",
       "summary": "Trump policy whiplash could slam Japanese carmakers for $40 billion on tariffs, EVs, emissions&nbsp;&nbsp;Automotive News",
@@ -496,7 +479,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-06-11",
       "title": "U.S. tariffs, lack of China guardrails put Canadian auto assembly at risk, Honda Canada CEO warns",
       "summary": "U.S. tariffs, lack of China guardrails put Canadian auto assembly at risk, Honda Canada CEO warns&nbsp;&nbsp;Automotive News",
@@ -513,7 +496,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "Germany",
       "date": "2026-06-10",
       "title": "Struggling German auto supplier Bosch pivots to robots",
       "summary": "Struggling German auto supplier Bosch pivots to robots&nbsp;&nbsp;France 24",
@@ -549,7 +532,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "UK",
       "date": "2026-06-08",
       "title": "Automakers call for delay to UK-EU EV tariffs",
       "summary": "Automakers call for delay to UK-EU EV tariffs&nbsp;&nbsp;electrive.com",
@@ -566,7 +549,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-06-07",
       "title": "EV tariff delay push exposes Europe’s failed battery-supply timetable",
       "summary": "EV tariff delay push exposes Europe’s failed battery-supply timetable&nbsp;&nbsp;EU Today",
@@ -583,9 +566,9 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-06-07",
-      "title": "Car industry pressing EU for further delay to Brexit EV tariffs | Automotive industry",
+      "title": "Car industry pressing EU for further delay to Brexit EV tariffs",
       "summary": "Car industry pressing EU for further delay to Brexit EV tariffs | Automotive industry&nbsp;&nbsp;The Guardian",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "The Guardian",
@@ -600,7 +583,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-06-06",
       "title": "Chinese EVs may hit U.S. within a few years, one way or another",
       "summary": "Chinese EVs may hit U.S. within a few years, one way or another&nbsp;&nbsp;CNBC",
@@ -611,13 +594,32 @@
       "source_feed": "Google News"
     },
     {
+      "id": "0bb35280c4",
+      "chain": "market",
+      "type": "news",
+      "regions": [
+        "Middle East",
+        "Europe",
+        "Rest of World"
+      ],
+      "country": "Global",
+      "date": "2026-06-05",
+      "title": "How much personal data is in my car and what can I do about it? |...",
+      "summary": "How much personal data is in my car and what can I do about it? |...&nbsp;&nbsp;The Car Expert",
+      "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
+      "author": "The Car Expert",
+      "impact": "less",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPcm5fZlNUR2EtdzdmSlkwbS1fM3Z5WG1jLXFhS0J0dG14dmRFSUUwcElSeDBidmNUMS04R3UyUmNQcWF5ZDdueFY5OXJXaUFMRjc1Z3VYR3NvVUpxODdodmJTRFhoR1FNQTEzRnk2eFM2R29MaUhmOGJmZ3pNLWM1QjJwVkl4cHFwSXZfUC1vTko3WjVYdUVmQ19B?oc=5",
+      "source_feed": "Google News"
+    },
+    {
       "id": "dec0405f27",
       "chain": "market",
       "type": "news",
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-06-03",
       "title": "China’s BYD captures 35% of Africa EV market, as latecomer rival Tesla bets on Morocco",
       "summary": "China’s BYD captures 35% of Africa EV market, as latecomer rival Tesla bets on Morocco&nbsp;&nbsp;IntelliNews",
@@ -653,7 +655,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "UK",
       "date": "2026-05-29",
       "title": "EU-UK auto trade needs pragmatism not protectionism",
       "summary": "EU-UK auto trade needs pragmatism not protectionism&nbsp;&nbsp;SMMT",
@@ -746,7 +748,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-05-15",
       "title": "Simon-Kucher study spotlights the rise neobanks around the world",
       "summary": "Simon-Kucher study spotlights the rise neobanks around the world&nbsp;&nbsp;Consultancy.eu",
@@ -820,7 +822,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-05-13",
       "title": "Explainer: How The First 3 Chinese EV Makers Are Complying To Canadian Automobile Compliance Policies",
       "summary": "Explainer: How The First 3 Chinese EV Makers Are Complying To Canadian Automobile Compliance Policies&nbsp;&nbsp;CleanTechnica",
@@ -913,7 +915,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "USA",
       "date": "2026-05-06",
       "title": "Hertz selling used rental cars on eBay. Why they can be a good deal for drivers",
       "summary": "Hertz selling used rental cars on eBay. Why they can be a good deal for drivers&nbsp;&nbsp;USA Today",
@@ -1026,7 +1028,7 @@
         "Middle East",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "India",
       "date": "2026-05-04",
       "title": "India's auto dealers brace for Middle East fallout after record April sales",
       "summary": "India's auto dealers brace for Middle East fallout after record April sales&nbsp;&nbsp;Reuters",
@@ -1092,23 +1094,6 @@
       "source_feed": "Google News"
     },
     {
-      "id": "1eababdaa5",
-      "chain": "market",
-      "type": "news",
-      "regions": [
-        "Middle East"
-      ],
-      "country": "Middle East",
-      "date": "2026-04-28",
-      "title": "Li Auto expands into Middle East and accelerates Asia-Pacific rollout",
-      "summary": "Li Auto expands into Middle East and accelerates Asia-Pacific rollout&nbsp;&nbsp;Gasgoo",
-      "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
-      "author": "Gasgoo",
-      "impact": "less",
-      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOdVpwOUdLakJhNlM1dUpUTHF0VElHXzJFcm4yaHNVdWJ1NlJVZGZ3R1R2bGhiajZMWmRDWU1HT25yX2g2eHFLN1hqRHdKUS1BVVVTdXZpWHJNRjVxdTdpYWFaTDNHYlNrT3hDc0Z6OER0ZU9YeEFvakdFLWlqaG9OOEZRZUh2QUFoQmxsYXdvNHNpY2RldHZLR2M4TXd0UlNvOGZjV2tIbUJfV294WmxZSEhKTU1zSDgwMVFOd21FcVVTQlZyYlN1Y1FwQQ?oc=5",
-      "source_feed": "Google News"
-    },
-    {
       "id": "901b4c5ca6",
       "chain": "automakers",
       "type": "news",
@@ -1135,7 +1120,7 @@
         "Middle East",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-04-27",
       "title": "Li Auto signs Middle East partnerships, accelerates global expansion",
       "summary": "Li Auto signs Middle East partnerships, accelerates global expansion&nbsp;&nbsp;China Daily",
@@ -1156,7 +1141,7 @@
       ],
       "country": "Global",
       "date": "2026-04-24",
-      "title": "Car Accessories Market Size, Share, Trends Report 2035 - Industry Growth Analysis",
+      "title": "Car Accessories Market Size, Share, Trends Report 2035",
       "summary": "Car Accessories Market Size, Share, Trends Report 2035 - Industry Growth Analysis&nbsp;&nbsp;Market Research Future",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Market Research Future",
@@ -1188,7 +1173,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "UAE",
       "date": "2026-04-16",
       "title": "Autotech Ventures Expands into UAE to drive GCC Auto Commerce Digitization",
       "summary": "Autotech Ventures Expands into UAE to drive GCC Auto Commerce Digitization&nbsp;&nbsp;The Fintech Times",
@@ -1209,7 +1194,7 @@
       ],
       "country": "Global",
       "date": "2026-04-14",
-      "title": "Cox Automotive Research Reveals the Tax Season Affordability Gap – and Why Hertz Car Sales Has the Answer",
+      "title": "Cox Automotive Research Reveals the Tax Season Affordability Gap",
       "summary": "Cox Automotive Research Reveals the Tax Season Affordability Gap – and Why Hertz Car Sales Has the Answer&nbsp;&nbsp;Hertz Newsroom",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Hertz Newsroom",
@@ -1297,7 +1282,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "Germany",
       "date": "2026-04-08",
       "title": "Xiaoying Says | Germany Is the True European Testing Ground for Chinese Cars",
       "summary": "Xiaoying Says | Germany Is the True European Testing Ground for Chinese Cars&nbsp;&nbsp;Gasgoo",
@@ -1314,9 +1299,9 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-04-01",
-      "title": "Demand for Lithium & Lithium-ion Battery Electrolyte in EU | Global Market Analysis Report - 2036",
+      "title": "Demand for Lithium & Lithium-ion Battery Electrolyte in EU | Global Market Analysis Report",
       "summary": "Demand for Lithium & Lithium-ion Battery Electrolyte in EU | Global Market Analysis Report - 2036&nbsp;&nbsp;Future Market Insights",
       "implication": "REVIEW: auto-classified as less implication — replace with the so-what for a ME/Europe distributor.",
       "author": "Future Market Insights",
@@ -1331,7 +1316,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-04-01",
       "title": "Tesla’s March car registrations soar in key European markets",
       "summary": "Tesla’s March car registrations soar in key European markets&nbsp;&nbsp;Free Malaysia Today",
@@ -1366,7 +1351,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-03-26",
       "title": "EV endgame: Stalling China’s export surge in Europe’s southern neighbourhood",
       "summary": "EV endgame: Stalling China’s export surge in Europe’s southern neighbourhood&nbsp;&nbsp;European Council on Foreign Relations",
@@ -1457,7 +1442,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-03-12",
       "title": "Canada won’t require sub-$35,000 China EVs in first year of quota",
       "summary": "Canada won’t require sub-$35,000 China EVs in first year of quota&nbsp;&nbsp;Automotive News",
@@ -1609,7 +1594,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-03-04",
       "title": "Middle East conflict disrupts Chinese auto Exports with ripple effects to Europe",
       "summary": "Middle East conflict disrupts Chinese auto Exports with ripple effects to Europe&nbsp;&nbsp;CarNewsChina.com",
@@ -1664,7 +1649,7 @@
       "regions": [
         "Europe"
       ],
-      "country": "Europe",
+      "country": "EU",
       "date": "2026-03-03",
       "title": "Europe's Auto Suppliers Are In Real Trouble",
       "summary": "Europe's Auto Suppliers Are In Real Trouble&nbsp;&nbsp;Jalopnik",
@@ -1719,7 +1704,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-02-27",
       "title": "Canada to begin issuing import permits for 49,000 China EV quota",
       "summary": "Canada to begin issuing import permits for 49,000 China EV quota&nbsp;&nbsp;Automotive News",
@@ -1736,7 +1721,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-02-25",
       "title": "Daunting obstacles stand in way of Chinese vehicles reaching U.S. customers",
       "summary": "Daunting obstacles stand in way of Chinese vehicles reaching U.S. customers&nbsp;&nbsp;Automotive News",
@@ -1755,7 +1740,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-02-24",
       "title": "European car sales decline as Chinese brands gain",
       "summary": "European car sales decline as Chinese brands gain&nbsp;&nbsp;Gulf Business",
@@ -1772,7 +1757,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "Kuwait",
       "date": "2026-02-24",
       "title": "Kuwait’s KPC draws BlackRock, Brookfield, EIG to possible $7bn pipeline deal",
       "summary": "Kuwait’s KPC draws BlackRock, Brookfield, EIG to possible $7bn pipeline deal&nbsp;&nbsp;Gulf Business",
@@ -1827,7 +1812,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-02-19",
       "title": "BYD sues US over Trump's tariffs as Chinese EV maker eyes Canada",
       "summary": "BYD sues US over Trump's tariffs as Chinese EV maker eyes Canada&nbsp;&nbsp;USA Today",
@@ -1844,7 +1829,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "France",
       "date": "2026-02-18",
       "title": "Carrefour exits more countries: French retailer's new plans upset investors",
       "summary": "Carrefour exits more countries: French retailer's new plans upset investors&nbsp;&nbsp;Gulf News",
@@ -1881,7 +1866,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "EU",
       "date": "2026-02-11",
       "title": "Chinese EV makers expected to seek EU tariff relief after VW’s win on Cupra Tavascan",
       "summary": "Chinese EV makers expected to seek EU tariff relief after VW’s win on Cupra Tavascan&nbsp;&nbsp;Automotive News",
@@ -1936,7 +1921,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-02-09",
       "title": "Mexico, Canada’s Chinese EV Imports Test U.S. Auto Industry",
       "summary": "Mexico, Canada’s Chinese EV Imports Test U.S. Auto Industry&nbsp;&nbsp;Council on Foreign Relations",
@@ -1954,7 +1939,7 @@
         "Europe",
         "Rest of World"
       ],
-      "country": "Global",
+      "country": "China",
       "date": "2026-02-08",
       "title": "EU and China Take Massive Step Toward Truce on EV Tariff Battle",
       "summary": "EU and China Take Massive Step Toward Truce on EV Tariff Battle&nbsp;&nbsp;Autoblog",
@@ -1990,7 +1975,7 @@
       "regions": [
         "Middle East"
       ],
-      "country": "Middle East",
+      "country": "Egypt",
       "date": "2026-02-05",
       "title": "Li Auto Opens First Two Stores in Egypt with Local Distributor",
       "summary": "Li Auto Opens First Two Stores in Egypt with Local Distributor&nbsp;&nbsp;eletric-vehicles.com",
@@ -2026,7 +2011,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-02-05",
       "title": "Brazil scraps EV tariff break for Chinese carmaker BYD amid pressure from rivals",
       "summary": "Brazil scraps EV tariff break for Chinese carmaker BYD amid pressure from rivals&nbsp;&nbsp;South China Morning Post",
@@ -2157,7 +2142,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "China",
       "date": "2026-01-16",
       "title": "Canada’s China EV decision garners mixed reaction",
       "summary": "Canada’s China EV decision garners mixed reaction&nbsp;&nbsp;Automotive News",
@@ -2174,7 +2159,7 @@
       "regions": [
         "Rest of World"
       ],
-      "country": "Rest of World",
+      "country": "India",
       "date": "2026-01-13",
       "title": "Škoda Auto Volkswagen India Reports 36% Growth in Domestic Sales in 2025",
       "summary": "Škoda Auto Volkswagen India Reports 36% Growth in Domestic Sales in 2025&nbsp;&nbsp;Autocar Professional",

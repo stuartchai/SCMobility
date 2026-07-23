@@ -131,6 +131,51 @@ REGION_PATTERNS = {
 }
 ALL_REGIONS = ["Middle East", "Europe", "Rest of World"]
 
+# Country detection. Each country maps to the phrases that imply it, plus the
+# region it belongs to (used only as a sanity cross-check). Order matters:
+# more specific / higher-priority entries first. The first match wins, so a
+# headline mentioning both "Saudi" and "China" is tagged by whichever appears
+# earliest in this list — tune the order to your priorities.
+COUNTRY_PATTERNS = [
+    # (display label, regex)
+    # Regional bodies first: an article about EU policy that merely mentions
+    # "Chinese EVs" should tag as EU, not China.
+    ("EU",           r"\b(european union|acea|brussels|european commission|"
+                     r"eu\s+\w+\s+(tariff|rule|regulation|mandate|market|deal|law)|"
+                     r"eu\s+(tariff|rule|regulation|mandate|market|deal|law))\b"),
+    ("UAE",          r"\b(uae|u\.a\.e\.|emirati|dubai|abu dhabi|sharjah)\b"),
+    ("Saudi Arabia", r"\b(saudi|k\.?s\.?a\.?|riyadh|jeddah)\b"),
+    ("Qatar",        r"\b(qatar|doha)\b"),
+    ("Oman",         r"\b(oman|muscat)\b"),
+    ("Kuwait",       r"\bkuwait\b"),
+    ("Bahrain",      r"\bbahrain\b"),
+    ("Egypt",        r"\b(egypt|cairo|egyptian)\b"),
+    ("Germany",      r"\b(germany|german|berlin|munich)\b"),
+    ("France",       r"\b(france|french|paris)\b"),
+    ("UK",           r"\b(uk|u\.k\.|britain|british|england|london)\b"),
+    ("Italy",        r"\b(italy|italian|rome|milan)\b"),
+    ("Spain",        r"\b(spain|spanish|madrid)\b"),
+    ("China",        r"\b(china|chinese|beijing|shanghai|shenzhen)\b"),
+    ("Japan",        r"\b(japan|japanese|tokyo)\b"),
+    ("USA",          r"\b(usa|u\.s\.a?\.?|united states|american|washington)\b"),
+    ("India",        r"\b(india|indian|delhi|mumbai)\b"),
+    ("South Korea",  r"\b(south korea|korean|seoul)\b"),
+    ("Brazil",       r"\b(brazil|brazilian)\b"),
+    # Generic "EU"/"Europe" as a last resort if nothing more specific matched
+    ("EU",           r"\b(eu|europe|european)\b"),
+]
+
+
+def country_for(text):
+    """Return a specific country if the text names one, else None.
+
+    None means 'no country found' — the caller then falls back to a region
+    label, so the country tag never simply echoes the region tag."""
+    for label, pattern in COUNTRY_PATTERNS:
+        if re.search(pattern, text, re.I):
+            return label
+    return None
+
 
 def regions_for(text):
     """Return every region an article is relevant to.
@@ -184,6 +229,23 @@ def publisher_from_google_title(title):
     return title.strip(), ""
 
 
+def clean_title(title):
+    """Remove residual publisher tags some feeds append to headlines.
+
+    publisher_from_google_title() handles the standard ' - Publisher' form,
+    but some sources (e.g. Eurasia Review) append the publisher after a
+    non-breaking space or a double space, which slips through. This strips:
+      * a trailing '  Publisher' or ' \xa0Publisher' (2+ spaces / nbsp), and
+      * a trailing ' - / – / — / | Publisher' that survived earlier splitting.
+    The publisher name is assumed to be a short (<=40 char) tail."""
+    t = title.replace("\u00a0", " ")
+    # " - Publisher" / " | Publisher" style
+    t = re.sub(r"\s+[-–—|]\s+[^-–—|]{1,40}$", "", t)
+    # "  Publisher" (two or more spaces before a capitalised short tail)
+    t = re.sub(r"\s{2,}[A-Z][\w.& ]{1,40}$", "", t)
+    return t.strip()
+
+
 # ---------------------------------------------------------------------------
 # 3. FETCH + BUILD
 # ---------------------------------------------------------------------------
@@ -226,21 +288,26 @@ def build(since=SINCE_DEFAULT, max_per_feed=25):
 
             date = (item_date or dt.date.today()).isoformat()
 
+            title = clean_title(title)
             blob = f"{title}. {summary}"
             chain = classify(CHAIN_RULES, blob)
             regions = regions_for(blob)
             imp = implication(blob)
 
-            # Country hint: if exactly one region matched, use it; otherwise
-            # label the card "Global". Refine to real countries manually.
-            country = regions[0] if len(regions) == 1 else "Global"
+            # Country tag: detect a real country from the text. Only if none is
+            # found do we fall back to a region label, so the country tag never
+            # simply repeats the region tag. If the region is multi (global) and
+            # no country matched, label it "Global".
+            country = country_for(blob)
+            if not country:
+                country = regions[0] if len(regions) == 1 else "Global"
 
             articles.append({
                 "id": key[:10],
                 "chain": chain,
                 "type": "news",
                 "regions": regions,
-                "country": country,         # refine manually for country granularity
+                "country": country,
                 "date": date,
                 "title": title,
                 "summary": summary[:400] or title,
