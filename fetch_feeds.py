@@ -129,16 +129,25 @@ REGION_PATTERNS = {
     "Rest of World": r"\b(china|chinese|japan|usa|u\.s\.|america|india|"
                      r"korea|brazil|australia|africa)\b",
 }
-ALL_REGIONS = ["Middle East", "Europe", "Rest of World"]
 
-def regions_for(text):
-    """Return every region an article is relevant to.
 
-    A story can match more than one (e.g. an EU-China tariff touches both
-    Europe and Rest of World). If nothing matches, treat it as globally
-    relevant -> all three, so it surfaces under every region filter."""
-    hits = [r for r, pat in REGION_PATTERNS.items() if re.search(pat, text, re.I)]
-    return hits or list(ALL_REGIONS)
+def region_bucket(text):
+    """Classify into exactly ONE filter bucket, matching the front-end:
+
+      "Middle East" — relevant to the Middle East only
+      "Europe"      — relevant to Europe only
+      "Global"      — spans more than one region, is outside ME/Europe
+                      (Rest of World), or has no clear region
+
+    Returns a string. The front-end reads either a `region` string or a
+    `regions` array; we emit the single string form here."""
+    hits = {r for r, pat in REGION_PATTERNS.items() if re.search(pat, text, re.I)}
+    if hits == {"Middle East"}:
+        return "Middle East"
+    if hits == {"Europe"}:
+        return "Europe"
+    # multi-region, Rest of World only, or nothing matched
+    return "Global"
 
 # Strong = a concrete opportunity/risk to a distributor (enabling/limiting
 # regulation, supply shocks, channel shifts, partnership openings).
@@ -245,14 +254,14 @@ def build(since=SINCE_DEFAULT, max_per_feed=25):
             title = clean_title(title)
             blob = f"{title}. {summary}"
             chain = classify(CHAIN_RULES, blob)
-            regions = regions_for(blob)
+            region = region_bucket(blob)
             imp = implication(blob)
 
             articles.append({
                 "id": key[:10],
                 "chain": chain,
                 "type": "news",
-                "regions": regions,
+                "region": region,           # "Middle East" | "Europe" | "Global"
                 "date": date,
                 "title": title,
                 "summary": summary[:400] or title,

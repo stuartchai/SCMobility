@@ -195,9 +195,6 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
 .ds-btn--white:hover { background: var(--ds-color-company-red-hover); color: var(--ds-text-on-color); border-color: var(--ds-color-company-red-hover); }
 .ds-btn:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
 
-/* Opinions get a subtle distinction: author-forward */
-.article--opinion .tag--chain { border-color: var(--ds-purple-300); color: var(--ds-purple-300); }
-
 @media (max-width: 760px) {
   .nav { padding: 0 var(--ds-space-04); gap: var(--ds-space-03); overflow-x: auto; }
   .nav__edition, .nav__brand span.sub { display: none; }
@@ -213,11 +210,10 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
 
 <!-- LEVEL 1 -->
 <nav class="nav">
-  <div class="nav__brand"><span class="nav__mark" aria-hidden="true"></span> Mobility Intelligence <span class="sub">ME &amp; Europe</span></div>
+  <div class="nav__brand"><span class="nav__mark" aria-hidden="true"></span> Mobility Intelligence</div>
   <div class="nav__links" role="tablist">
     <button class="nav__link" role="tab" aria-current="true" data-view="latest">Latest News</button>
     <button class="nav__link" role="tab" aria-current="false" data-view="older">Older News</button>
-    <button class="nav__link" role="tab" aria-current="false" data-view="opinions">Opinions</button>
     <button class="nav__link" role="tab" aria-current="false" data-view="saved">Saved Articles <span class="nav__count" id="savedCount" style="display:none">0</span></button>
     <button class="nav__link" role="tab" aria-current="false" data-view="pending">Pending Action <span class="nav__count" id="pendingCount" style="display:none">0</span></button>
   </div>
@@ -246,9 +242,9 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
     <div class="geobar" id="geobar" role="group" aria-label="Region filter">
       <span class="geobar__label">Region</span>
       <button class="geo-pill" data-geo="" aria-pressed="true">All</button>
+      <button class="geo-pill" data-geo="Global" aria-pressed="false">Global</button>
       <button class="geo-pill" data-geo="Middle East" aria-pressed="false">Middle East</button>
       <button class="geo-pill" data-geo="Europe" aria-pressed="false">Europe</button>
-      <button class="geo-pill" data-geo="Rest of World" aria-pressed="false">Rest of World</button>
     </div>
   </div>
 
@@ -267,8 +263,6 @@ const CHAINS = {
   aftermarket:   { title:"Aftermarket",   desc:"News on used cars, hire and rental, and maintenance and repair — including service players expanding, serving or partnering with distributors, and used-car, hire or rental firms partnering with distributors." },
   regulation:    { title:"Regulation",    desc:"Regulations relevant to automotive — tariffs, emissions standards, EV mandates, import rules and homologation." }
 };
-const REGIONS = ["Middle East","Europe","Rest of World"];
-
 
 /* Simple thumbnail illustrations per chain (renderable SVG, brand-safe) */
 function thumbSVG(chain, seed){
@@ -284,7 +278,7 @@ function thumbSVG(chain, seed){
 }
 
 /* ============================================================
-   ARTICLES  (age drives Latest vs Older; opinion flag routes to Opinions)
+   ARTICLES  (age drives Latest vs Older)
    date: ISO. Anything within 14 days of "today" is Latest.
    ============================================================ */
 const TODAY = new Date('2026-07-23');
@@ -422,24 +416,7 @@ let ARTICLES = [
     title:"Research: EU–China EV tariffs to reshape adoption and total cost of ownership",
     summary:"A Nature Energy study models how EU tariffs on Chinese EVs propagate through total cost of ownership, projecting 2035 EU EV share between ~56% and ~69% depending on whether automakers withdraw or onshore low-cost production.",
     implication:"Longer-horizon evidence rather than an immediate trigger; useful for scenario planning on EV mix and pricing.",
-    author:"Nature Energy", url:"https://www.nature.com/articles/s41560-026-02105-7" },
-
-  // ================= OPINIONS =================
-  { id:"o1", chain:"distribution", type:"opinion", regions:["Middle East"], country:"UAE", date:"2026-04-20", impact:"strong",
-    title:"Al-Futtaim's Antoine Barthes on building 'choice-rich' mobility in the GCC",
-    summary:"In an interview, Al-Futtaim Automotive's Antoine Barthes argues the GCC is moving toward 'choice-rich' mobility — a wider spread of powertrains, brands and ownership models — and that distributors must broaden their portfolios accordingly.",
-    implication:"A distributor-leadership view that supports diversifying our brand and powertrain mix and expanding beyond pure new-car sales.",
-    author:"Antoine Barthes, Al-Futtaim Automotive (Gulf Business)", url:"https://gulfbusiness.com/en/2026/interviews/al-futtaim-automotives-antoine-barthes-on-choice-rich-mobility-in-the-gcc/" },
-  { id:"o2", chain:"regulation", type:"opinion", regions:["Europe"], country:"EU", date:"2026-07-02", impact:"strong",
-    title:"Are EV tariffs the right answer to Europe's competitiveness problem?",
-    summary:"A Centre for European Reform analyst argues the EU is right to worry about Chinese subsidies but questions whether tariffs are the right remedy, suggesting they may mainly accelerate Chinese local production in Europe.",
-    implication:"A policy perspective that shapes how we read the durability of EV tariffs and Chinese-brand localisation in our European markets.",
-    author:"Anton Spisak, Centre for European Reform", url:"https://www.cer.eu/insights/eus-drive-china-what-ev-tariffs-mean-europe" },
-  { id:"o3", chain:"automakers", type:"opinion", regions:["Rest of World"], country:"China", date:"2026-06-10", impact:"less",
-    title:"BYD's CEO: we can catch Toyota to become the world's No. 1 automaker",
-    summary:"BYD founder Wang Chuanfu argues that after dropping pure-ICE cars in 2022, BYD's bet on EVs and plug-in hybrids has paid off, and that new battery and charging technology can make it the world's largest automaker within five years.",
-    implication:"A view on Chinese ambition and technology direction; useful strategic context rather than an immediate action.",
-    author:"Wang Chuanfu, BYD (Electrek)", url:"https://electrek.co/2026/06/10/byd-outsold-ford-thinks-it-can-catch-toyota-for-no-1/" }
+    author:"Nature Energy", url:"https://www.nature.com/articles/s41560-026-02105-7" }
 ];
 
 /* ============================================================
@@ -456,9 +433,9 @@ let actions = {};
 try { const raw = window.localStorage ? localStorage.getItem(ACTION_KEY) : null; if (raw) actions = JSON.parse(raw); } catch(e){ actions = {}; }
 function persistActions(){ try { if (window.localStorage) localStorage.setItem(ACTION_KEY, JSON.stringify(actions)); } catch(e){} }
 
-let view = "latest";        // latest | older | opinions | saved | pending
+let view = "latest";        // latest | older | saved | pending
 let chain = "market";       // market | automakers | distribution | aftermarket | regulation
-let geo = "";               // "" | Middle East | Europe | Rest of World
+let geo = "";               // "" | Global | Middle East | Europe
 
 /* ============================================================
    HELPERS
@@ -478,31 +455,34 @@ function cleanTitle(t){
     .trim();
 }
 
-// Region is stored as an array of regions an article is relevant to.
-// Accept legacy single-string `region` too, for feed compatibility.
-function regionsOf(a){
-  if (Array.isArray(a.regions)) return a.regions;
-  if (typeof a.region === 'string') {
-    return a.region === 'Global'
-      ? ["Middle East","Europe","Rest of World"]
-      : [a.region];
-  }
-  return [];
+// Each article maps to exactly ONE bucket for filtering/labelling:
+//   "Middle East" — relevant to Middle East only
+//   "Europe"      — relevant to Europe only
+//   "Global"      — spans more than one region, or is outside ME/Europe
+// Accepts either a `regions` array or a legacy single `region` string.
+function bucketOf(a){
+  let r;
+  if (Array.isArray(a.regions)) r = a.regions.slice();
+  else if (typeof a.region === 'string') r = a.region === 'Global'
+    ? ["Middle East","Europe","Rest of World"] : [a.region];
+  else r = [];
+  const set = new Set(r);
+  // Only ME, nothing else -> Middle East
+  if (set.has("Middle East") && set.size === 1) return "Middle East";
+  // Only Europe, nothing else -> Europe
+  if (set.has("Europe") && set.size === 1) return "Europe";
+  // Everything else (multi-region, Rest of World, empty) -> Global
+  return "Global";
 }
-function matchesGeo(a, sel){ return !sel || regionsOf(a).includes(sel); }
-function regionLabel(a){
-  const r = regionsOf(a);
-  const core = ["Middle East","Europe","Rest of World"];
-  if (core.every(x => r.includes(x))) return "Global";
-  return r.join(" · ");
-}
+function matchesGeo(a, sel){ return !sel || bucketOf(a) === sel; }
+function regionLabel(a){ return bucketOf(a); }
 
 /* ============================================================
    RENDER CARD
    ============================================================ */
 function card(a, idx){
   const isSaved = !!saved[a.id];
-  const chainLabel = a.type === "opinion" ? "Opinion" : CHAINS[a.chain].title;
+  const chainLabel = CHAINS[a.chain].title;
   const title = cleanTitle(a.title);
   const titleHtml = a.url
     ? `<a class="article__titlelink" href="${esc(a.url)}" target="_blank" rel="noopener">${esc(title)}</a>`
@@ -510,7 +490,7 @@ function card(a, idx){
   const act = actions[a.id];               // saved proposed-action text, if any
   const hasAction = act && act.trim();
   return `
-  <article class="article ${a.type==='opinion'?'article--opinion':''}">
+  <article class="article">
     <div class="article__thumb">${thumbSVG(a.chain, idx)}</div>
     <div class="article__body">
       <div class="article__meta">
@@ -555,25 +535,18 @@ function render(){
   const showChain = (view === 'latest' || view === 'older');
 
   subnav.style.display = showChain ? 'flex' : 'none';
-  filterbar.style.display = (showChain || view === 'opinions') ? 'flex' : 'none';
+  filterbar.style.display = showChain ? 'flex' : 'none';
 
   if (view === 'saved'){
     eyebrow.textContent = "Saved Articles";
     title.textContent = "Saved Articles";
-    desc.textContent = "Every article you've saved, across news and opinions. Saved items persist on this device.";
+    desc.textContent = "Every article you've saved. Saved items persist in the browser on this device.";
     items = savedList().sort((x,y)=> new Date(y.date) - new Date(x.date));
   } else if (view === 'pending'){
     eyebrow.textContent = "Pending Action";
     title.textContent = "Pending Action";
     desc.textContent = "Articles with a proposed action still open. Mark an action done to remove it from this list.";
     items = pendingList().sort((x,y)=> new Date(y.date) - new Date(x.date));
-  } else if (view === 'opinions'){
-    eyebrow.textContent = "Opinions";
-    title.textContent = "Opinions";
-    desc.textContent = "Perspectives from industry thought leaders — commentary and analysis, not reported news.";
-    items = ARTICLES.filter(a => a.type === 'opinion');
-    items = items.filter(a => matchesGeo(a, geo));
-    items.sort((x,y)=> new Date(y.date) - new Date(x.date));
   } else {
     eyebrow.textContent = (view==='latest'?'Latest News':'Older News') + " · " + CHAINS[chain].title;
     title.textContent = CHAINS[chain].title;
@@ -601,7 +574,6 @@ function render(){
     else if (view==='pending') msg = "No open actions. Add a proposed action on any article and it will appear here.";
     else if (view==='latest') msg = "No articles in the last two weeks for this section" + f + ". Try Older News or a different region.";
     else if (view==='older') msg = "No older articles for this section" + f + ".";
-    else if (view==='opinions') msg = "No opinion pieces" + f + " right now.";
     list.innerHTML = `<div class="empty">${msg}</div>`;
   }
 

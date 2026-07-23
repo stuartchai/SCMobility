@@ -24,11 +24,8 @@ with a real snapshot of current news and can optionally read a live feed.
 **Level 1 — primary tabs (top nav)**
 - **Latest News** — items dated within the last 14 days.
 - **Older News** — items older than 14 days.
-- **Opinions** — commentary from industry thought leaders (kept separate from
-  reported news).
-- **Saved Articles** — anything you've saved, across news and opinions. A live
-  count badge shows on the tab. Saved items persist in the browser on the
-  device (localStorage).
+- **Saved Articles** — anything you've saved. A live count badge shows on the
+  tab. Saved items persist in the browser on the device (localStorage).
 - **Pending Action** — every article that has an open proposed action. A live
   count badge shows on the tab. Marking an action done removes it from here.
 
@@ -48,13 +45,16 @@ Each article card links to its original source **through the headline**
 - **Regulation** — tariffs, emissions standards, EV mandates, import rules,
   homologation.
 
-**Level 3 — region filter (news tabs and Opinions)**
-- **All / Middle East / Europe / Rest of World.** Regions are **overlapping,
-  not exclusive** — an article records every region it's relevant to, so a
-  genuinely global story (e.g. an EU–China tariff) surfaces under Middle East,
-  Europe *and* Rest of World rather than hiding in a separate bucket. Articles
-  relevant to all three show a "Global" label on the card. "All" shows the
-  comprehensive list.
+**Level 3 — region filter (news tabs)**
+- **All / Global / Middle East / Europe.** Each article falls into exactly one
+  bucket (mutually exclusive):
+  - **Middle East** — relevant to the Middle East only.
+  - **Europe** — relevant to Europe only.
+  - **Global** — spans more than one region, or is outside Middle East/Europe
+    (e.g. a China-only or worldwide story), or has no clear single region.
+  - **All** shows everything.
+  Because the buckets don't overlap, a global story no longer appears under the
+  Middle East or Europe filters — it only shows under Global (or All).
 
 (The earlier "implication" filter and the "Why it matters to us" line have been
 removed.)
@@ -99,9 +99,8 @@ Each article is an object:
 ```js
 {
   id, chain, type,            // chain: market|automakers|distribution|aftermarket|regulation
-                              // type:  news | opinion
-  regions,                    // array, e.g. ["Middle East"] or
-                              //   ["Middle East","Europe","Rest of World"] (global)
+                              // type:  news
+  region,                     // one bucket: "Middle East" | "Europe" | "Global"
   date,                       // ISO date; drives Latest (<=14d) vs Older
   title, summary,             // title is cleaned of trailing publisher tags
   author, url                 // source attribution; url backs the headline link
@@ -110,9 +109,10 @@ Each article is an object:
 
 `impact` and `implication` fields may still appear in feed output but are no
 longer displayed by the front-end. Any `country` field is ignored — country
-tagging was removed. The front-end also accepts a legacy single `region` string
-(with `"Global"` expanding to all three regions), so a partially-updated feed
-won't break it.
+tagging was removed. For backward compatibility the front-end also accepts a
+`regions` array (and collapses it: an array covering more than one region, or
+containing only "Rest of World", becomes "Global"), so an older feed won't
+break — but new output uses the single `region` string above.
 
 ## Option A — use the snapshot as-is
 
@@ -157,7 +157,9 @@ Automate the pull with cron, a GitHub Action, or any cloud scheduler, e.g.:
 
 The script derives, per item:
 - **chain** — value-chain bucket, from keywords.
-- **regions** — every relevant region (multi-match; no clear region → all three).
+- **region** — one mutually-exclusive bucket: "Middle East" (ME only),
+  "Europe" (Europe only), or "Global" (multi-region, outside ME/Europe, or
+  unclear).
 - **title** — cleaned of trailing publisher tags. Google News' standard
   " - Publisher" suffix is split off, and `clean_title()` additionally strips
   publisher names appended after a non-breaking/double space (e.g. the
