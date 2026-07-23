@@ -88,7 +88,13 @@ switch to Option B.
 ## Option B — automated fortnightly feed
 
     pip install feedparser
-    python fetch_feeds.py            # writes articles.json
+    python fetch_feeds.py            # news on/after 2026-01-01 -> articles.json
+
+By default the script only pulls news published **on or after 1 January 2026**.
+Override with `--since YYYY-MM-DD` (e.g. `--since 2026-06-01`), or pass
+`--since ""` to disable the floor. The cutoff is enforced both via Google News'
+`after:` search operator and a hard date filter in the script (which also drops
+undated items), so nothing older slips through.
 
 Host `articles.json` in the **same folder** as the HTML (must be served over
 http/https, not opened via file://, or the browser will block the fetch). The

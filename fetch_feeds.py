@@ -27,8 +27,15 @@ aggregators and are preferred for anything client-facing.
 USAGE
 -----
     pip install feedparser
-    python fetch_feeds.py                # writes articles.json next to this file
+    python fetch_feeds.py                # news on/after 2026-01-01 -> articles.json
+    python fetch_feeds.py --since 2026-06-01   # tighter window
+    python fetch_feeds.py --since ""           # no date floor (everything)
     python fetch_feeds.py --out /path/to/articles.json
+
+By default only news published on or after 1 January 2026 is included. This is
+enforced two ways: Google News queries carry an `after:` operator, and build()
+applies a hard date floor that also covers feeds (like EIN) that ignore it.
+Undated items are dropped whenever a floor is set.
 
 Run it on a schedule (cron / GitHub Action / cloud scheduler) each fortnight,
 then host articles.json next to the HTML. See the companion note for how to
@@ -62,26 +69,39 @@ except ImportError:
 #   Topic:  https://news.google.com/rss/headlines/section/topic/BUSINESS
 #   Search: https://news.google.com/rss/search?q=YOUR+QUERY&hl=en&gl=US&ceid=US:en
 # We use targeted searches so results map cleanly onto the value chain.
+#
+# Google News supports search operators inside q=, including `after:YYYY-MM-DD`
+# (and `before:`), so we can ask the feed itself to return only recent items.
+# A hard date floor is ALSO applied in build() to catch feeds that ignore it.
 
-def gnews(query: str) -> str:
+# Only include news published on/after this date. Overridable with --since.
+SINCE_DEFAULT = "2026-01-01"
+
+
+def gnews(query: str, since: str = SINCE_DEFAULT) -> str:
+    q = f"{query} after:{since}" if since else query
     return ("https://news.google.com/rss/search?q="
-            + quote_plus(query)
+            + quote_plus(q)
             + "&hl=en-US&gl=US&ceid=US:en")
 
-FEEDS = [
-    # (source_label, url)
-    ("Google News", gnews("automotive distributor Middle East Europe")),
-    ("Google News", gnews("car sales volume Europe GCC")),
-    ("Google News", gnews("EV tariff regulation automotive")),
-    ("Google News", gnews("used car rental fleet dealer partnership")),
-    ("Google News", gnews("automaker earnings EV strategy")),
-    # EIN News — Automotive Industry Today (public RSS):
-    ("EIN Automotive Industry Today",
-     "https://automotive.einnews.com/rss/2Xr4kU8fJ9-tV3bp"),  # replace with the exact feed URL from the EIN page
-    # --- Preferred: add original-source / official feeds below ---
-    # ("Reuters Autos", "https://www.reutersagency.com/feed/?best-topics=automotive&post_type=best"),
-    # ("ACEA", "https://www.acea.auto/rss/news.xml"),
-]
+
+def build_feeds(since: str = SINCE_DEFAULT):
+    """Feed list, built with the date floor baked into Google News queries."""
+    return [
+        # (source_label, url)
+        ("Google News", gnews("automotive distributor Middle East Europe", since)),
+        ("Google News", gnews("car sales volume Europe GCC", since)),
+        ("Google News", gnews("EV tariff regulation automotive", since)),
+        ("Google News", gnews("used car rental fleet dealer partnership", since)),
+        ("Google News", gnews("automaker earnings EV strategy", since)),
+        # EIN News — Automotive Industry Today (public RSS). The `after:` operator
+        # does not apply here; the date floor in build() handles it instead.
+        ("EIN Automotive Industry Today",
+         "https://automotive.einnews.com/rss/2Xr4kU8fJ9-tV3bp"),  # replace with the exact feed URL from the EIN page
+        # --- Preferred: add original-source / official feeds below ---
+        # ("Reuters Autos", "https://www.reutersagency.com/feed/?best-topics=automotive&post_type=best"),
+        # ("ACEA", "https://www.acea.auto/rss/news.xml"),
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -167,11 +187,13 @@ def publisher_from_google_title(title):
 # ---------------------------------------------------------------------------
 # 3. FETCH + BUILD
 # ---------------------------------------------------------------------------
-def build(max_per_feed=25):
+def build(since=SINCE_DEFAULT, max_per_feed=25):
     seen = set()
     articles = []
+    skipped_old = 0
+    since_date = dt.date.fromisoformat(since) if since else None
 
-    for source_label, url in FEEDS:
+    for source_label, url in build_feeds(since):
         feed = feedparser.parse(url)
         for entry in feed.entries[:max_per_feed]:
             raw_title = entry.get("title", "").strip()
@@ -190,9 +212,19 @@ def build(max_per_feed=25):
             # date
             parsed = entry.get("published_parsed") or entry.get("updated_parsed")
             if parsed:
-                date = dt.date(parsed.tm_year, parsed.tm_mon, parsed.tm_mday).isoformat()
+                item_date = dt.date(parsed.tm_year, parsed.tm_mon, parsed.tm_mday)
             else:
-                date = dt.date.today().isoformat()
+                item_date = None
+
+            # Hard date floor: keep only items on/after `since`. Items with no
+            # parseable date are dropped when a floor is set, so nothing older
+            # (or of unknown age) slips through.
+            if since_date is not None:
+                if item_date is None or item_date < since_date:
+                    skipped_old += 1
+                    continue
+
+            date = (item_date or dt.date.today()).isoformat()
 
             blob = f"{title}. {summary}"
             chain = classify(CHAIN_RULES, blob)
@@ -223,24 +255,33 @@ def build(max_per_feed=25):
 
     # newest first
     articles.sort(key=lambda a: a["date"], reverse=True)
-    return articles
+    return articles, skipped_old
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="articles.json")
     ap.add_argument("--max-per-feed", type=int, default=25)
+    ap.add_argument("--since", default=SINCE_DEFAULT,
+                    help="Only include news on/after this ISO date "
+                         f"(YYYY-MM-DD). Default {SINCE_DEFAULT}. "
+                         "Pass an empty string to disable the floor.")
     args = ap.parse_args()
 
-    articles = build(max_per_feed=args.max_per_feed)
+    since = args.since or None
+    articles, skipped_old = build(since=since, max_per_feed=args.max_per_feed)
     payload = {
         "generated": dt.datetime.utcnow().isoformat() + "Z",
+        "since": since,
         "count": len(articles),
         "articles": articles,
     }
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(f"Wrote {len(articles)} articles to {args.out}")
+    floor_msg = f"on/after {since}" if since else "with no date floor"
+    print(f"Wrote {len(articles)} articles ({floor_msg}) to {args.out}")
+    if skipped_old:
+        print(f"Skipped {skipped_old} item(s) older than {since} or undated.")
     print("NOTE: review chain/region/implication and rewrite each 'implication' "
           "field before publishing — the auto-classifier is a first pass only.")
 
