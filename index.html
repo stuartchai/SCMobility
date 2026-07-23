@@ -125,16 +125,6 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
 .geo-pill[aria-pressed="true"] { background: var(--ds-color-company-red); border-color: var(--ds-color-company-red); color: var(--ds-text-on-color); }
 .geo-pill:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
 
-/* Strong-implication pill carries a small marker so meaning isn't colour-only */
-.geo-pill--strong { display: inline-flex; align-items: center; gap: var(--ds-space-02); }
-.geo-pill--strong::before { content: ""; width: 8px; height: 8px; background: var(--ds-color-company-red); border-radius: 50%; flex-shrink: 0; }
-.geo-pill--strong[aria-pressed="true"]::before { background: var(--ds-color-white); }
-
-/* Implication badge on cards */
-.tag--imp-strong { border-color: var(--ds-color-company-red); background: var(--ds-color-company-red); color: var(--ds-text-on-color); }
-.tag--imp-strong .dot { width: 7px; height: 7px; background: var(--ds-color-white); border-radius: 50%; display: inline-block; }
-.tag--imp-less { border-color: var(--ds-stroke); background: var(--ds-gray-x-light); color: var(--ds-text-regular); }
-
 .results-count { font-size: 14px; color: var(--ds-text-regular); margin-bottom: var(--ds-space-05); }
 .results-count strong { color: var(--ds-text-black); }
 
@@ -157,12 +147,35 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
 .tag--flag { padding-left: var(--ds-space-02); text-transform: none; letter-spacing: 0; }
 .tag__flag { width: 18px; height: 12px; flex-shrink: 0; display: inline-block; vertical-align: middle; border: 1px solid var(--ds-gray-light); }
 .article__title { font-size: 24px; line-height: 30px; font-weight: 700; color: var(--ds-text-black); margin: 0 0 var(--ds-space-03); letter-spacing: -0.01em; }
+.article__titlelink { color: var(--ds-text-black); text-decoration: none; }
+.article__titlelink:hover { color: var(--ds-color-company-red); text-decoration: underline; }
+.article__titlelink:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
 .article__summary { font-size: 16px; line-height: 25px; color: var(--ds-text-dark); margin: 0 0 var(--ds-space-04); }
-.article__implication { font-size: 14px; line-height: 22px; color: var(--ds-text-body); border-left: 3px solid var(--ds-gray-dark); padding-left: var(--ds-space-04); margin: 0 0 var(--ds-space-04); }
-.article__implication strong { color: var(--ds-text-black); }
 .article__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-04); flex-wrap: wrap; }
 .article__byline { font-size: 13px; color: var(--ds-text-regular); }
 .article__byline .src { font-weight: 700; color: var(--ds-text-dark); }
+
+/* Proposed-action box */
+.action { margin-top: var(--ds-space-04); padding-top: var(--ds-space-04); border-top: 1px dashed var(--ds-stroke); }
+.action__label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ds-text-regular); margin-bottom: var(--ds-space-02); }
+.action__row { display: flex; gap: var(--ds-space-03); align-items: flex-start; flex-wrap: wrap; }
+.action__input {
+  flex: 1; min-width: 220px; font-family: inherit; font-size: 14px; line-height: 20px;
+  padding: var(--ds-space-03); border: 1px solid var(--ds-stroke); border-radius: 6px;
+  resize: vertical; color: var(--ds-text-dark); background: var(--ds-color-white);
+}
+.action__input:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 1px; }
+.action__save, .action__done {
+  font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+  padding: var(--ds-space-03) var(--ds-space-04); border-radius: 6px; min-height: 42px; white-space: nowrap;
+}
+.action__save { background: var(--ds-color-company-red); color: var(--ds-text-on-color); border: 1px solid var(--ds-color-company-red); }
+.action__save:hover { background: var(--ds-color-company-red-hover); border-color: var(--ds-color-company-red-hover); }
+.action__done { background: var(--ds-color-white); color: var(--ds-text-dark); border: 1px solid var(--ds-stroke); }
+.action__done:hover { border-color: var(--ds-color-company-red); color: var(--ds-color-company-red); }
+.action__save:focus-visible, .action__done:focus-visible { outline: 2px solid var(--ds-color-company-red); outline-offset: 2px; }
+.action--set { border-top-color: var(--ds-color-company-red); }
+.action--set .action__label::after { content: " · open"; color: var(--ds-color-company-red); }
 
 /* Save button */
 .save-btn {
@@ -208,6 +221,7 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
     <button class="nav__link" role="tab" aria-current="false" data-view="older">Older News</button>
     <button class="nav__link" role="tab" aria-current="false" data-view="opinions">Opinions</button>
     <button class="nav__link" role="tab" aria-current="false" data-view="saved">Saved Articles <span class="nav__count" id="savedCount" style="display:none">0</span></button>
+    <button class="nav__link" role="tab" aria-current="false" data-view="pending">Pending Action <span class="nav__count" id="pendingCount" style="display:none">0</span></button>
   </div>
   <div class="nav__spacer"></div>
   <div class="nav__edition" id="navEdition">Snapshot: 23 Jul 2026 · live sources</div>
@@ -237,12 +251,6 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 700; color: var(--ds-text-
       <button class="geo-pill" data-geo="Middle East" aria-pressed="false">Middle East</button>
       <button class="geo-pill" data-geo="Europe" aria-pressed="false">Europe</button>
       <button class="geo-pill" data-geo="Rest of World" aria-pressed="false">Rest of World</button>
-    </div>
-    <div class="geobar" id="impbar" role="group" aria-label="Implication filter">
-      <span class="geobar__label">Implication</span>
-      <button class="geo-pill" data-imp="" aria-pressed="true">All</button>
-      <button class="geo-pill geo-pill--strong" data-imp="strong" aria-pressed="false">Strong implication</button>
-      <button class="geo-pill" data-imp="less" aria-pressed="false">Less implication</button>
     </div>
   </div>
 
@@ -458,10 +466,15 @@ let saved = {};
 try { const raw = window.localStorage ? localStorage.getItem(STORE_KEY) : null; if (raw) saved = JSON.parse(raw); } catch(e){ saved = {}; }
 function persist(){ try { if (window.localStorage) localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e){} }
 
-let view = "latest";        // latest | older | opinions | saved
-let chain = "market";       // market | automakers | distribution | regulation
-let geo = "";               // "" | Global | Middle East | Europe | Rest of World
-let imp = "";               // "" | strong | less
+// Proposed actions: { [articleId]: "action text" }. Removing the entry = done.
+const ACTION_KEY = "mobility_actions_v1";
+let actions = {};
+try { const raw = window.localStorage ? localStorage.getItem(ACTION_KEY) : null; if (raw) actions = JSON.parse(raw); } catch(e){ actions = {}; }
+function persistActions(){ try { if (window.localStorage) localStorage.setItem(ACTION_KEY, JSON.stringify(actions)); } catch(e){} }
+
+let view = "latest";        // latest | older | opinions | saved | pending
+let chain = "market";       // market | automakers | distribution | aftermarket | regulation
+let geo = "";               // "" | Middle East | Europe | Rest of World
 
 /* ============================================================
    HELPERS
@@ -472,6 +485,15 @@ function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB',{day:'num
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function flag(c){ return FLAGS[c] || FLAGS.Global; }
 function savedList(){ return ARTICLES.filter(a => saved[a.id]); }
+function pendingList(){ return ARTICLES.filter(a => actions[a.id] && actions[a.id].trim()); }
+// Strip trailing "  Publisher" / " - Publisher" tags feeds append to headlines.
+function cleanTitle(t){
+  return String(t || "")
+    .replace(/\u00a0/g, ' ')          // nbsp -> space
+    .replace(/\s+[-–—|]\s+[^-–—|]{1,40}$/, '')  // " - Publisher" style suffix
+    .replace(/\s{2,}[A-Z][\w.& ]{1,40}$/, '')   // "  Publisher" (double-space) suffix
+    .trim();
+}
 
 // Region is stored as an array of regions an article is relevant to.
 // Accept legacy single-string `region` too, for feed compatibility.
@@ -498,28 +520,38 @@ function regionLabel(a){
 function card(a, idx){
   const isSaved = !!saved[a.id];
   const chainLabel = a.type === "opinion" ? "Opinion" : CHAINS[a.chain].title;
-  const impBadge = a.impact === 'strong'
-    ? '<span class="tag tag--imp-strong"><span class="dot" aria-hidden="true"></span> Strong implication</span>'
-    : '<span class="tag tag--imp-less">Less implication</span>';
+  const title = cleanTitle(a.title);
+  const titleHtml = a.url
+    ? `<a class="article__titlelink" href="${esc(a.url)}" target="_blank" rel="noopener">${esc(title)}</a>`
+    : esc(title);
+  const act = actions[a.id];               // saved proposed-action text, if any
+  const hasAction = act && act.trim();
   return `
   <article class="article ${a.type==='opinion'?'article--opinion':''}">
     <div class="article__thumb">${thumbSVG(a.chain, idx)}</div>
     <div class="article__body">
       <div class="article__meta">
         <span class="tag tag--chain">${esc(chainLabel)}</span>
-        ${impBadge}
         <span class="tag tag--flag">${flag(a.country)} ${esc(a.country)}</span>
         <span class="tag">${esc(regionLabel(a))}</span>
       </div>
-      <h2 class="article__title">${esc(a.title)}</h2>
+      <h2 class="article__title">${titleHtml}</h2>
       <p class="article__summary">${esc(a.summary)}</p>
-      <p class="article__implication"><strong>Why it matters to us:</strong> ${esc(a.implication)}</p>
       <div class="article__foot">
-        <span class="article__byline"><span class="src">${esc(a.author)}</span> · ${fmtDate(a.date)}${a.url ? ` · <a href="${esc(a.url)}" target="_blank" rel="noopener">Read source</a>` : ''}</span>
+        <span class="article__byline"><span class="src">${esc(a.author)}</span> · ${fmtDate(a.date)}</span>
         <button class="save-btn" data-save="${a.id}" aria-pressed="${isSaved}">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-5-7 5V4a1 1 0 0 1 1-1z"/></svg>
           ${isSaved ? 'Saved' : 'Save'}
         </button>
+      </div>
+      <div class="action ${hasAction ? 'action--set' : ''}">
+        <label class="action__label" for="act-${a.id}">Proposed action</label>
+        <div class="action__row">
+          <textarea class="action__input" id="act-${a.id}" data-action-input="${a.id}"
+            rows="1" placeholder="Add a proposed action…">${hasAction ? esc(act) : ''}</textarea>
+          <button class="action__save" data-action-save="${a.id}">Save</button>
+          <button class="action__done" data-action-done="${a.id}" title="Mark as done / delete"${hasAction ? '' : ' style="display:none"'}>Mark done</button>
+        </div>
       </div>
     </div>
   </article>`;
@@ -548,13 +580,17 @@ function render(){
     title.textContent = "Saved Articles";
     desc.textContent = "Every article you've saved, across news and opinions. Saved items persist on this device.";
     items = savedList().sort((x,y)=> new Date(y.date) - new Date(x.date));
+  } else if (view === 'pending'){
+    eyebrow.textContent = "Pending Action";
+    title.textContent = "Pending Action";
+    desc.textContent = "Articles with a proposed action still open. Mark an action done to remove it from this list.";
+    items = pendingList().sort((x,y)=> new Date(y.date) - new Date(x.date));
   } else if (view === 'opinions'){
     eyebrow.textContent = "Opinions";
     title.textContent = "Opinions";
     desc.textContent = "Perspectives from industry thought leaders — commentary and analysis, not reported news.";
     items = ARTICLES.filter(a => a.type === 'opinion');
     items = items.filter(a => matchesGeo(a, geo));
-    if (imp) items = items.filter(a => a.impact === imp);
     items.sort((x,y)=> new Date(y.date) - new Date(x.date));
   } else {
     eyebrow.textContent = (view==='latest'?'Latest News':'Older News') + " · " + CHAINS[chain].title;
@@ -562,27 +598,26 @@ function render(){
     desc.textContent = CHAINS[chain].desc;
     items = ARTICLES.filter(a => a.type === 'news' && a.chain === chain && (view==='latest'? isLatest(a) : !isLatest(a)));
     items = items.filter(a => matchesGeo(a, geo));
-    if (imp) items = items.filter(a => a.impact === imp);
     items.sort((x,y)=> new Date(y.date) - new Date(x.date));
   }
 
   if (view === 'saved'){
     count.innerHTML = items.length ? `<strong>${items.length}</strong> saved article${items.length>1?'s':''}` : "";
+  } else if (view === 'pending'){
+    count.innerHTML = items.length ? `<strong>${items.length}</strong> article${items.length>1?'s':''} awaiting action` : "";
   } else {
-    const bits = [];
-    if (geo) bits.push(geo);
-    if (imp) bits.push(imp === 'strong' ? 'strong implication' : 'less implication');
-    const suffix = bits.length ? ` · ${bits.join(' · ')}` : "";
+    const suffix = geo ? ` · ${geo}` : "";
     count.innerHTML = `<strong>${items.length}</strong> article${items.length!==1?'s':''}${suffix}`;
   }
 
   if (items.length){
     list.innerHTML = items.map((a,i)=>card(a,i)).join("");
   } else {
-    const f = (geo?` in ${geo}`:"") + (imp? (geo?', ':' ') + (imp==='strong'?'with strong implication':'with less implication') : "");
+    const f = (geo?` in ${geo}`:"");
     let msg = "No articles here yet.";
     if (view==='saved') msg = "You haven't saved anything yet. Tap the Save button on any article to keep it here.";
-    else if (view==='latest') msg = "No articles in the last two weeks for this section" + f + ". Try Older News or a different filter.";
+    else if (view==='pending') msg = "No open actions. Add a proposed action on any article and it will appear here.";
+    else if (view==='latest') msg = "No articles in the last two weeks for this section" + f + ". Try Older News or a different region.";
     else if (view==='older') msg = "No older articles for this section" + f + ".";
     else if (view==='opinions') msg = "No opinion pieces" + f + " right now.";
     list.innerHTML = `<div class="empty">${msg}</div>`;
@@ -591,6 +626,9 @@ function render(){
   const sc = document.getElementById('savedCount');
   const n = savedList().length;
   sc.textContent = n; sc.style.display = n ? 'inline-block' : 'none';
+  const pc = document.getElementById('pendingCount');
+  const pn = pendingList().length;
+  pc.textContent = pn; pc.style.display = pn ? 'inline-block' : 'none';
 }
 
 /* ============================================================
@@ -600,9 +638,8 @@ document.querySelectorAll('.nav__link').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     view = btn.dataset.view;
     document.querySelectorAll('.nav__link').forEach(b=> b.setAttribute('aria-current', b===btn?'true':'false'));
-    geo = ""; imp = "";
+    geo = "";
     document.querySelectorAll('#geobar .geo-pill').forEach(p=> p.setAttribute('aria-pressed', p.dataset.geo===''?'true':'false'));
-    document.querySelectorAll('#impbar .geo-pill').forEach(p=> p.setAttribute('aria-pressed', p.dataset.imp===''?'true':'false'));
     render();
     window.scrollTo({top:0,behavior:'smooth'});
   });
@@ -624,21 +661,36 @@ document.querySelectorAll('#geobar .geo-pill').forEach(btn=>{
   });
 });
 
-document.querySelectorAll('#impbar .geo-pill').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    imp = btn.dataset.imp;
-    document.querySelectorAll('#impbar .geo-pill').forEach(b=> b.setAttribute('aria-pressed', b===btn?'true':'false'));
-    render();
-  });
-});
-
 document.getElementById('articleList').addEventListener('click', e=>{
-  const btn = e.target.closest('[data-save]');
-  if (!btn) return;
-  const id = btn.dataset.save;
-  if (saved[id]) delete saved[id]; else saved[id] = true;
-  persist();
-  render();
+  // Save / unsave
+  const saveBtn = e.target.closest('[data-save]');
+  if (saveBtn){
+    const id = saveBtn.dataset.save;
+    if (saved[id]) delete saved[id]; else saved[id] = true;
+    persist();
+    render();
+    return;
+  }
+  // Save a proposed action
+  const actSave = e.target.closest('[data-action-save]');
+  if (actSave){
+    const id = actSave.dataset.actionSave;
+    const ta = document.querySelector(`[data-action-input="${id}"]`);
+    const val = ta ? ta.value.trim() : "";
+    if (val){ actions[id] = val; } else { delete actions[id]; }
+    persistActions();
+    render();
+    return;
+  }
+  // Mark action done (delete it)
+  const actDone = e.target.closest('[data-action-done]');
+  if (actDone){
+    const id = actDone.dataset.actionDone;
+    delete actions[id];
+    persistActions();
+    render();
+    return;
+  }
 });
 
 /* INIT */
